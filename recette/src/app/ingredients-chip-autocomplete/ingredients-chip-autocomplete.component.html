@@ -1,0 +1,22 @@
+<form>
+    <mat-form-field>
+        <mat-label>{{text}}</mat-label>
+        <mat-chip-grid #chipGrid>
+            @for (ingredient of ingredients; track ingredient) {
+            <mat-chip-row (removed)="remove(ingredient)">
+                {{ingredient}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+            }
+        </mat-chip-grid>
+        <input #input [formControl]="inputCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+            (matChipInputTokenEnd)="add($event)" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            @for (ingredient of filteredIngredients | async; track ingredient) {
+            <mat-option [value]="ingredient">{{ingredient}}</mat-option>
+            }
+        </mat-autocomplete>
+    </mat-form-field>
+</form>

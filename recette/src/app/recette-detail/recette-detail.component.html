@@ -1,0 +1,13 @@
+<h1>{{getRecette().nom}}</h1>
+<h2>Ingrédients</h2>
+<ul *ngFor="let ci of getRecette().categorieIngredient">
+    <li *ngFor="let i of ci.ingredient">
+        <label><input type="checkbox"> {{i.nom}} </label>
+    </li>
+</ul>
+<h2>Préparation</h2>
+<ol *ngFor="let cp of getRecette().categoriePreparation">
+    <li *ngFor="let p of cp.preparation">
+        {{p.text}}
+    </li>
+</ol>

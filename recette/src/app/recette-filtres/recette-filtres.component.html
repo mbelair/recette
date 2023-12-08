@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Filtres</h2>
+<form>
+    <mat-dialog-content>
+        <mat-accordion multi="true">
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Inclure un ingrédient
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-ingredients-chip-autocomplete text="Inclure un ingrédient"></app-ingredients-chip-autocomplete>
+            </mat-expansion-panel>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Exclure un ingrédient
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-ingredients-chip-autocomplete text="Exclure un ingrédient"></app-ingredients-chip-autocomplete>
+            </mat-expansion-panel>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Type de repas
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Temps total
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Mot-clé
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button color="primary" mat-dialog-close>VOIR LES RÉSULTATS</button>
+    </mat-dialog-actions>
+
+
+
+
+</form>
