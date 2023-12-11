@@ -24,6 +24,15 @@
                         Type de repas
                     </mat-panel-title>
                 </mat-expansion-panel-header>
+                <section [formGroup]="mealType">
+                    <p><mat-checkbox formControlName="accompagnement">Accompagnement</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="collation">Collation</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="dejeuner">Déjeuner & brunch</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="dessert">Dessert</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="entree">Entrée</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="diner">Dîner</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="platPrincipal">Plat principal</mat-checkbox></p>
+                </section>
             </mat-expansion-panel>
             <mat-expansion-panel hideToggle>
                 <mat-expansion-panel-header>
@@ -31,6 +40,11 @@
                         Temps total
                     </mat-panel-title>
                 </mat-expansion-panel-header>
+                <section [formGroup]="totalTime">
+                    <p><mat-checkbox formControlName="less30">Inférieur à 30 minutes</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="from30to60">De 30 à 60 minutes</mat-checkbox></p>
+                    <p><mat-checkbox formControlName="more60">Supérieur à 60 minutes</mat-checkbox></p>
+                </section>
             </mat-expansion-panel>
             <mat-expansion-panel hideToggle>
                 <mat-expansion-panel-header>

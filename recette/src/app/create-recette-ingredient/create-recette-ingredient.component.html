@@ -1,0 +1,34 @@
+<mat-form-field>
+    <mat-label>Quantité</mat-label>
+    <input matInput type="number">
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Unité</mat-label>
+    <mat-select>
+        <mat-optgroup label="Volume">
+            <mat-option value="one">tasse</mat-option>
+            <mat-option value="two">cuillère à soupe</mat-option>
+            <mat-option value="two">cuillère à thé</mat-option>
+            <mat-option value="two">mL</mat-option>
+        </mat-optgroup>
+        <mat-optgroup label="Poids">
+            <mat-option value="two">g</mat-option>
+            <mat-option value="two">lb</mat-option>
+        </mat-optgroup>
+        <mat-option value="two">Unité</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Ingrédient</mat-label>
+    <input #input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
+    <mat-autocomplete #auto="matAutocomplete">
+        @for (ingredient of filteredIngredients | async; track ingredient) {
+        <mat-option [value]="ingredient">{{ingredient}}</mat-option>
+        }
+    </mat-autocomplete>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Détail</mat-label>
+    <input matInput />
+
+</mat-form-field>
