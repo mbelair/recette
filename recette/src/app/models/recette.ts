@@ -2,7 +2,7 @@ import { CategorieIngredient } from "./categorieIngredient";
 import { CategoriePreparation } from "./categoriePreparation";
 import { Tag } from "./tag";
 
-export interface Recette {
+export class Recette {
     id: number;
     nom: string;
     tempsPreparation: number;
@@ -12,4 +12,10 @@ export interface Recette {
     tags: Tag[];
     categoriePreparation: CategoriePreparation[];
     categorieIngredient: CategorieIngredient[];
+
+    constructor(defaultValues = false) {
+        this.categorieIngredient = [new CategorieIngredient(defaultValues)];
+        this.categoriePreparation = [];
+        this.tags = [];
+    }
 }

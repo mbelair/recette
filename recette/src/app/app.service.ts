@@ -80,12 +80,10 @@ export class AppService {
   }
 
   generateIngredients(): CategorieIngredient[] {
-    let toReturn: CategorieIngredient = {
-      id: 1,
-      nom: "asdf",
-      ordre: 0,
-      ingredient: []
-    };
+    let toReturn: CategorieIngredient = new CategorieIngredient();
+    toReturn.id = 1;
+    toReturn.nom = "asdf";
+    toReturn.ordre = 0;
     let numberOfSteps = this.getRandomIntFromInterval(2, 10);
     for (let i = 0; i < numberOfSteps; i++) {
       const unite = this.getRandomUnite();

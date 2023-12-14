@@ -25,7 +25,7 @@ export class RecetteComponent implements OnInit {
   }
 
   openFilterDialog() {
-    const dialogRef = this.dialog.open(RecetteFiltresComponent, {
+    this.dialog.open(RecetteFiltresComponent, {
       minWidth: "50%"
     });
   }
