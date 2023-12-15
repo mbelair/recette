@@ -1,0 +1,13 @@
+mat-form-field {
+    display: block;
+}
+
+.inputRow {
+    display: flex;
+
+    mat-form-field {
+        display: flex;
+        flex: 1 1 0;
+        margin-right: 10px;
+    }
+}

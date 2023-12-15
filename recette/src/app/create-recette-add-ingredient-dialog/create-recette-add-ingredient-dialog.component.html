@@ -1,23 +1,28 @@
 <h1 mat-dialog-title>Ajouter un ingrédient</h1>
 <div mat-dialog-content>
+    <div class="inputRow">
+        <mat-form-field>
+            <mat-label>Catégorie</mat-label>
+            <mat-select [formControl]="category">
+                <mat-option *ngFor="let category of categorieIngredient"
+                    [value]="category.id">{{category.nom}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button (click)="openAddCategoryDialog()" mat-icon-button color="primary">
+            <mat-icon fontIcon="add"></mat-icon>
+        </button>
+    </div>
     <mat-form-field>
         <mat-label>Quantité</mat-label>
-        <input matInput type="number">
+        <input matInput type="number" [(ngModel)]="ingredient.quantite">
     </mat-form-field>
     <mat-form-field>
         <mat-label>Unité</mat-label>
-        <mat-select>
-            <mat-optgroup label="Volume">
-                <mat-option value="one">tasse</mat-option>
-                <mat-option value="two">cuillère à soupe</mat-option>
-                <mat-option value="two">cuillère à thé</mat-option>
-                <mat-option value="two">mL</mat-option>
+        <mat-select [(ngModel)]="ingredient.unite">
+            <mat-optgroup *ngFor="let group of UNITE_GROUP.groups" [label]="group.label">
+                <mat-option *ngFor="let unite of group.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
             </mat-optgroup>
-            <mat-optgroup label="Poids">
-                <mat-option value="two">g</mat-option>
-                <mat-option value="two">lb</mat-option>
-            </mat-optgroup>
-            <mat-option value="two">Unité</mat-option>
+            <mat-option *ngFor="let unite of UNITE_GROUP.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field>
@@ -31,11 +36,11 @@
     </mat-form-field>
     <mat-form-field>
         <mat-label>Détail</mat-label>
-        <input matInput />
+        <input matInput [(ngModel)]="ingredient.detail" />
 
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
     <button (click)="onCancelClick()" mat-flat-button>Cancel</button>
-    <button [mat-dialog-close]="data" mat-flat-button color="primary">Ok</button>
+    <button (click)="onOkClick()" mat-flat-button color="primary">Ok</button>
 </div>

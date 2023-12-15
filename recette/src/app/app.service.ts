@@ -93,7 +93,7 @@ export class AppService {
         ordre: i,
         quantite: unite.quantite,
         unite: unite.unite,
-        filterable: true,
+        detail: null
       };
       toReturn.ingredient.push(step);
     }

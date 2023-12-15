@@ -5,5 +5,5 @@ export class Ingredient {
     quantite: number;
     unite: string;
     ordre: number;
-    filterable: boolean;
+    detail: string;
 }

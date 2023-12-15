@@ -1,5 +1,5 @@
 <h1>Créer une recette</h1>
-<h2>Informations</h2>
+<h2>Information</h2>
 <mat-form-field>
     <mat-label>Nom de la recette</mat-label>
     <input matInput />
@@ -18,16 +18,19 @@
 </mat-form-field>
 <h2>Ingrédients</h2>
 <div class="ingredientHeader">
-    <button (click)="openAddCategoryDialog()" mat-raised-button color="primary">
-        <mat-icon fontIcon="add"></mat-icon>
-        Catégorie</button>
-</div>
-<div *ngFor="let category of recette.categorieIngredient">
-    <h3 *ngIf="category.ordre >=0">{{category.nom}}</h3>
-    <button (click)="openAddIngredientDialog(category)" mat-raised-button color="primary">
+    <button (click)="openAddIngredientDialog()" mat-raised-button color="primary">
         <mat-icon fontIcon="add"></mat-icon>
         Ingrédient
     </button>
+</div>
+<div *ngFor="let category of recette.categorieIngredient">
+    <h3 *ngIf="!category.isDefaultCategory">{{category.nom}}</h3>
+    <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let ingredient of category.ingredient">
+            <mat-icon matListItemIcon>fiber_manual_record</mat-icon>
+            {{ingredient.quantite}} {{getUnitLabel(ingredient)}} {{ingredient.nom}} {{ingredient.detail}}
+        </mat-list-item>
+    </mat-list>
 </div>
 <h2>Préparation</h2>
 

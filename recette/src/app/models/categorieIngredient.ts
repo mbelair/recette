@@ -5,12 +5,15 @@ export class CategorieIngredient {
     nom: string;
     ordre: number;
     ingredient: Ingredient[];
+    isDefaultCategory: boolean = false;
 
 
     constructor(defaultValues = false) {
         if (defaultValues) {
             this.nom = "Aucune catégorie"
-            this.ordre = -1;
+            this.ordre = 0;
+            this.id = 0;
+            this.isDefaultCategory = true;
         }
         this.ingredient = [];
     }
