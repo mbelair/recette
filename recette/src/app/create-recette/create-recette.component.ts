@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { CreateRecetteAddIngredientDialogComponent } from '../create-recette-add-ingredient-dialog/create-recette-add-ingredient-dialog.component';
 import { Recette } from '../models/recette';
 import { UniteMesure } from '../models/uniteMesure';
-import { Ingredient } from '../models/ingredient';
+import { IngredientRecette } from '../models/ingredientRecette';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class CreateRecetteComponent {
     });
   }
 
-  getUnitLabel(ingredient: Ingredient): string {
+  getUnitLabel(ingredient: IngredientRecette): string {
     return UniteMesure.fromTypeCode(ingredient.unite).getFormatedLabel(ingredient.quantite > 1);
   }
 }

@@ -3,7 +3,7 @@ import { Recette } from './models/recette';
 import { CategoriePreparation } from './models/categoriePreparation';
 import { Preparation } from './models/preparation';
 import { CategorieIngredient } from './models/categorieIngredient';
-import { Ingredient } from './models/ingredient';
+import { IngredientRecette } from './models/ingredientRecette';
 import { Tag } from './models/tag';
 
 @Injectable({
@@ -87,7 +87,7 @@ export class AppService {
     let numberOfSteps = this.getRandomIntFromInterval(2, 10);
     for (let i = 0; i < numberOfSteps; i++) {
       const unite = this.getRandomUnite();
-      let step: Ingredient = {
+      let step: IngredientRecette = {
         id: i,
         nom: this.getRandomName(),
         ordre: i,

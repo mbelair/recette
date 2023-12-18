@@ -25,15 +25,21 @@
             <mat-option *ngFor="let unite of UNITE_GROUP.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
-        <mat-label>Ingrédient</mat-label>
-        <input #input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
-        <mat-autocomplete #auto="matAutocomplete">
-            @for (ingredient of filteredIngredients | async; track ingredient) {
-            <mat-option [value]="ingredient">{{ingredient}}</mat-option>
-            }
-        </mat-autocomplete>
-    </mat-form-field>
+    <div class="inputRow">
+        <mat-form-field>
+            <mat-label>Ingrédient</mat-label>
+            <input #input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
+            <mat-autocomplete #auto="matAutocomplete">
+                @for (ingredient of filteredIngredients | async; track ingredient) {
+                <mat-option [value]="ingredient">{{ingredient}}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+        <button (click)="openAddIngredientDialog()" mat-icon-button color="primary">
+            <mat-icon fontIcon="add"></mat-icon>
+        </button>
+    </div>
+
     <mat-form-field>
         <mat-label>Détail</mat-label>
         <input matInput [(ngModel)]="ingredient.detail" />

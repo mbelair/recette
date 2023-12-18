@@ -1,10 +1,10 @@
-import { Ingredient } from "./ingredient";
+import { IngredientRecette } from "./ingredientRecette";
 
 export class CategorieIngredient {
     id: number;
     nom: string;
     ordre: number;
-    ingredient: Ingredient[];
+    ingredient: IngredientRecette[];
     isDefaultCategory: boolean = false;
 
 
@@ -19,7 +19,7 @@ export class CategorieIngredient {
     }
 
     equals(other: CategorieIngredient): boolean {
-        return this.id === other.id && this.nom === other.nom && this.ordre === other.ordre && this.ingredient.length === other.ingredient.length && this.ingredient.map((value: Ingredient, index: number) => {
+        return this.id === other.id && this.nom === other.nom && this.ordre === other.ordre && this.ingredient.length === other.ingredient.length && this.ingredient.map((value: IngredientRecette, index: number) => {
             return value === other.ingredient[index];
         }).reduce((accumulator, currentValue) => {
             return accumulator && currentValue;

@@ -7,13 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Observable, map, startWith } from 'rxjs';
-import { Ingredient } from '../models/ingredient';
+import { IngredientRecette } from '../models/ingredientRecette';
 import { MatButtonModule } from '@angular/material/button';
 import { Recette } from '../models/recette';
 import { CreateRecetteAddCategoryDialogComponent } from '../create-recette-add-category-dialog/create-recette-add-category-dialog.component';
 import { CategorieIngredient } from '../models/categorieIngredient';
 import { MatIconModule } from '@angular/material/icon';
 import { UniteMesure } from '../models/uniteMesure';
+import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 
 @Component({
   selector: 'app-create-recette-add-ingredient-dialog',
@@ -23,7 +24,7 @@ import { UniteMesure } from '../models/uniteMesure';
   styleUrl: './create-recette-add-ingredient-dialog.component.scss'
 })
 export class CreateRecetteAddIngredientDialogComponent {
-  protected ingredient: Ingredient = new Ingredient();
+  protected ingredient: IngredientRecette = new IngredientRecette();
   protected recette: Recette;
 
   protected categorieIngredient: CategorieIngredient[] = [];
@@ -92,6 +93,12 @@ export class CreateRecetteAddIngredientDialogComponent {
       }, -1);
       this.categorieIngredient.push(result);
       this.category.setValue(result.id);
+    });
+  }
+
+  openAddIngredientDialog() {
+    const dialogRef = this.dialog.open(CreateIngredientComponent, {
+
     });
   }
 }
