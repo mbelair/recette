@@ -28,10 +28,10 @@
     <div class="inputRow">
         <mat-form-field>
             <mat-label>Ingrédient</mat-label>
-            <input #input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
-            <mat-autocomplete #auto="matAutocomplete">
+            <input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                 @for (ingredient of filteredIngredients | async; track ingredient) {
-                <mat-option [value]="ingredient">{{ingredient}}</mat-option>
+                <mat-option [value]="ingredient">{{ingredient.nom}}</mat-option>
                 }
             </mat-autocomplete>
         </mat-form-field>

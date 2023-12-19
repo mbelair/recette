@@ -8,6 +8,7 @@ import { IngredientCategoryEnum, Ingredient } from '../models/ingredient';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { AppService } from '../app.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class CreateIngredientComponent {
 
   categories: IngredientCategoryEnum[] = IngredientCategoryEnum.allIngredientCategories();
 
-  constructor(public dialogRef: MatDialogRef<CreateIngredientComponent>) {
+  constructor(public dialogRef: MatDialogRef<CreateIngredientComponent>, private appService: AppService) {
     console.log(this.categories)
   }
 
@@ -30,5 +31,10 @@ export class CreateIngredientComponent {
     this.dialogRef.close();
   }
 
+  onOkClick(): void {
+    this.appService.createIngredient(this.data).subscribe({
+      next: () => this.dialogRef.close()
+    });
+  }
 
 }

@@ -28,7 +28,7 @@
     <mat-list role="list">
         <mat-list-item role="listitem" *ngFor="let ingredient of category.ingredient">
             <mat-icon matListItemIcon>fiber_manual_record</mat-icon>
-            {{ingredient.quantite}} {{getUnitLabel(ingredient)}} {{ingredient.nom}} {{ingredient.detail}}
+            {{ingredient.quantite}} {{getUnitLabel(ingredient)}} {{ingredient.ingredient.nom}} {{ingredient.detail}}
         </mat-list-item>
     </mat-list>
 </div>

@@ -2,19 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Observable, map, startWith } from 'rxjs';
-import { IngredientRecette } from '../models/ingredientRecette';
-import { MatButtonModule } from '@angular/material/button';
-import { Recette } from '../models/recette';
+import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
+import { AppService } from '../app.service';
+import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 import { CreateRecetteAddCategoryDialogComponent } from '../create-recette-add-category-dialog/create-recette-add-category-dialog.component';
 import { CategorieIngredient } from '../models/categorieIngredient';
-import { MatIconModule } from '@angular/material/icon';
+import { Ingredient } from '../models/ingredient';
+import { IngredientRecette } from '../models/ingredientRecette';
+import { Recette } from '../models/recette';
 import { UniteMesure } from '../models/uniteMesure';
-import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 
 @Component({
   selector: 'app-create-recette-add-ingredient-dialog',
@@ -29,10 +31,8 @@ export class CreateRecetteAddIngredientDialogComponent {
 
   protected categorieIngredient: CategorieIngredient[] = [];
 
-  filteredIngredients: Observable<string[]>;
-  inputCtrl = new FormControl('', [Validators.required]);
-  ingredients: string[] = [];
-  allIngredients: string[] = ['Pomme', 'Citron', 'Lime', 'Orange', 'Fraise'];
+  filteredIngredients: Observable<Ingredient[]>;
+  inputCtrl = new FormControl('');
 
 
   category = new FormControl(0);
@@ -42,22 +42,35 @@ export class CreateRecetteAddIngredientDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<CreateRecetteAddIngredientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) protected data: { recette: Recette },
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private appService: AppService
   ) {
-    this.filteredIngredients = this.inputCtrl.valueChanges.pipe(
-      startWith(null),
-      map((i: string | null) => (i ? this._filter(i) : this.allIngredients.slice())),
-    );
+
     this.recette = data.recette;
 
     this.categorieIngredient = [];
     this.recette.categorieIngredient.map(ci => this.categorieIngredient.push(ci));
+
+
+    this.filteredIngredients = this.inputCtrl.valueChanges.pipe(
+      startWith(null),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((searchTerm: string | Ingredient) => {
+        const nom = typeof searchTerm === 'string' ? searchTerm : searchTerm?.nom;
+        return this.appService.getAllIngredients(nom)
+      }),
+    );
+
+    this.appService.ingredients.subscribe({
+      next: () => {
+        this.inputCtrl.updateValueAndValidity();
+      }
+    })
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allIngredients.filter(ingredient => ingredient.toLowerCase().includes(filterValue));
+  displayFn(i: Ingredient): string {
+    return i && i.nom ? i.nom : '';
   }
 
   onCancelClick(): void {
@@ -77,7 +90,7 @@ export class CreateRecetteAddIngredientDialogComponent {
         return Math.max(accumulator2, currentValue2.id);
       }, -1));
     }, -1);
-    this.ingredient.nom = this.inputCtrl.getRawValue();
+    this.ingredient.ingredient = typeof this.inputCtrl.value === 'string' ? null : (this.inputCtrl.value as Ingredient);
     this.recette.categorieIngredient.find(ci => ci.id === this.category.getRawValue()).ingredient.push(this.ingredient);
     this.dialogRef.close();
   }

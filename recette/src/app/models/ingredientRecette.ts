@@ -1,7 +1,8 @@
+import { Ingredient } from "./ingredient";
 
 export class IngredientRecette {
     id: number;
-    nom: string;
+    ingredient: Ingredient;
     quantite: number;
     unite: string;
     ordre: number;

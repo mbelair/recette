@@ -5,14 +5,42 @@ import { Preparation } from './models/preparation';
 import { CategorieIngredient } from './models/categorieIngredient';
 import { IngredientRecette } from './models/ingredientRecette';
 import { Tag } from './models/tag';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Ingredient } from './models/ingredient';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
+  ingredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject([]);
+
   constructor() {
     this.generateTestData();
+    this.ingredients.subscribe({
+      next: (v) => {
+        console.log(v);
+      }
+    })
+  }
+
+  getAllIngredients(search: String): Observable<Ingredient[]> {
+    const allIngredients = this.ingredients.value.slice();
+
+    if (search) {
+      const filterValue = search.toLowerCase();
+
+      return of(allIngredients.filter(ingredient => ingredient.nom.toLowerCase().includes(filterValue)));
+    } else {
+      return of(allIngredients.slice());
+    }
+  }
+
+  createIngredient(ingredient: Ingredient): Observable<void> {
+    const allIngredients = this.ingredients.value.slice();
+    allIngredients.push(ingredient);
+    this.ingredients.next(allIngredients);
+    return of(null);
   }
 
   loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis vulputate enim nulla aliquet. Sed euismod nisi porta lorem mollis. Pretium fusce id velit ut tortor pretium viverra suspendisse. Adipiscing elit ut aliquam purus sit amet. Fusce id velit ut tortor pretium viverra suspendisse potenti nullam. Tellus integer feugiat scelerisque varius. Malesuada fames ac turpis egestas integer. Ipsum dolor sit amet consectetur adipiscing elit. Ultricies tristique nulla aliquet enim tortor at auctor. Nisl rhoncus mattis rhoncus urna neque. Quam vulputate dignissim suspendisse in est ante in.Etiam sit amet nisl purus in mollis. Augue neque gravida in fermentum et sollicitudin ac orci. Est ullamcorper eget nulla facilisi. Libero id faucibus nisl tincidunt eget nullam non nisi est. Fringilla urna porttitor rhoncus dolor. Quis commodo odio aenean sed adipiscing diam. Ligula ullamcorper malesuada proin libero nunc consequat. Etiam sit amet nisl purus in mollis nunc sed. Accumsan lacus vel facilisis volutpat est velit egestas dui. At volutpat diam ut venenatis tellus in. Facilisis leo vel fringilla est ullamcorper. Pharetra sit amet aliquam id diam maecenas ultricies mi. Sodales neque sodales ut etiam sit amet. Vulputate mi sit amet mauris commodo. Semper risus in hendrerit gravida rutrum quisque non tellus. Pulvinar etiam non quam lacus suspendisse. Nisl nisi scelerisque eu ultrices vitae auctor eu. Aliquet lectus proin nibh nisl condimentum id. Tincidunt augue interdum velit euismod in pellentesque massa placerat duis. Habitasse platea dictumst quisque sagittis purus sit amet. Leo duis ut diam quam nulla porttitor. Mattis molestie a iaculis at erat pellentesque. Odio morbi quis commodo odio aenean sed adipiscing diam donec. Fringilla ut morbi tincidunt augue. Bibendum est ultricies integer quis. Senectus et netus et malesuada fames ac turpis egestas integer. Faucibus interdum posuere lorem ipsum dolor sit. Euismod nisi porta lorem mollis aliquam ut porttitor. Vel risus commodo viverra maecenas accumsan lacus vel facilisis volutpat. Id neque aliquam vestibulum morbi blandit cursus risus at. Porta non pulvinar neque laoreet suspendisse. Molestie at elementum eu facilisis sed odio morbi quis commodo. Amet consectetur adipiscing elit ut aliquam purus sit. Consequat ac felis donec et odio. Praesent tristique magna sit amet. Sed augue lacus viverra vitae congue eu consequat. Eu lobortis elementum nibh tellus molestie. Varius quam quisque id diam vel quam elementum. Tempus quam pellentesque nec nam aliquam sem. Vel pretium lectus quam id leo in vitae turpis massa. Facilisi morbi tempus iaculis urna id volutpat lacus. Viverra tellus in hac habitasse platea dictumst. Faucibus a pellentesque sit amet. Elit ut aliquam purus sit amet luctus venenatis lectus. Vitae suscipit tellus mauris a diam. Id porta nibh venenatis cras sed felis eget velit aliquet. Dui accumsan sit amet nulla facilisi. Tortor condimentum lacinia quis vel eros. Condimentum lacinia quis vel eros donec ac odio tempor. Quis ipsum suspendisse ultrices gravida dictum fusce. Massa id neque aliquam vestibulum morbi blandit cursus. Mollis nunc sed id semper risus in hendrerit. Cum sociis natoque penatibus et magnis. Id consectetur purus ut faucibus pulvinar elementum integer enim neque. Rhoncus mattis rhoncus urna neque viverra justo. Pellentesque elit ullamcorper dignissim cras tincidunt. Ultrices eros in cursus turpis. Nec tincidunt praesent semper feugiat nibh sed pulvinar. Lobortis feugiat vivamus at augue eget arcu dictum.";
@@ -89,7 +117,7 @@ export class AppService {
       const unite = this.getRandomUnite();
       let step: IngredientRecette = {
         id: i,
-        nom: this.getRandomName(),
+        ingredient: new Ingredient(),
         ordre: i,
         quantite: unite.quantite,
         unite: unite.unite,
