@@ -2,7 +2,7 @@
 <h2>Ingrédients</h2>
 <ul *ngFor="let ci of getRecette().categorieIngredient">
     <li *ngFor="let i of ci.ingredient">
-        <label><input type="checkbox"> {{i.nom}} </label>
+        <label><input type="checkbox"> {{i.ingredient.nom}} </label>
     </li>
 </ul>
 <h2>Préparation</h2>

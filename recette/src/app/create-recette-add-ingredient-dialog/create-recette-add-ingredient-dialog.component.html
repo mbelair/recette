@@ -1,50 +1,62 @@
 <h1 mat-dialog-title>Ajouter un ingrédient</h1>
 <div mat-dialog-content>
-    <div class="inputRow">
+    <form [formGroup]="form">
+        <div class="inputRow">
+            <mat-form-field>
+                <mat-label>Catégorie</mat-label>
+                <mat-select [formControl]="categoryCtrl">
+                    <mat-option *ngFor="let category of categorieIngredient"
+                        [value]="category.id">{{category.nom}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button (click)="openAddCategoryDialog()" mat-icon-button color="primary">
+                <mat-icon fontIcon="add"></mat-icon>
+            </button>
+        </div>
         <mat-form-field>
-            <mat-label>Catégorie</mat-label>
-            <mat-select [formControl]="category">
-                <mat-option *ngFor="let category of categorieIngredient"
-                    [value]="category.id">{{category.nom}}</mat-option>
+            <mat-label>Quantité</mat-label>
+            <input matInput type="number" [formControl]="quantiteCtrl">
+            @if (quantiteCtrl.hasError('required')) {
+            <mat-error>Quantité est <strong>obligatoire</strong></mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Unité</mat-label>
+            <mat-select [formControl]="uniteCtrl">
+                <mat-optgroup *ngFor="let group of UNITE_GROUP.groups" [label]="group.label">
+                    <mat-option *ngFor="let unite of group.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
+                </mat-optgroup>
+                <mat-option *ngFor="let unite of UNITE_GROUP.units"
+                    [value]="unite.typeCode">{{unite.label}}</mat-option>
             </mat-select>
+            @if (uniteCtrl.hasError('required')) {
+            <mat-error>Unité est <strong>obligatoire</strong></mat-error>
+            }
         </mat-form-field>
-        <button (click)="openAddCategoryDialog()" mat-icon-button color="primary">
-            <mat-icon fontIcon="add"></mat-icon>
-        </button>
-    </div>
-    <mat-form-field>
-        <mat-label>Quantité</mat-label>
-        <input matInput type="number" [(ngModel)]="ingredient.quantite">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Unité</mat-label>
-        <mat-select [(ngModel)]="ingredient.unite">
-            <mat-optgroup *ngFor="let group of UNITE_GROUP.groups" [label]="group.label">
-                <mat-option *ngFor="let unite of group.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
-            </mat-optgroup>
-            <mat-option *ngFor="let unite of UNITE_GROUP.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <div class="inputRow">
-        <mat-form-field>
-            <mat-label>Ingrédient</mat-label>
-            <input [matAutocomplete]="auto" matInput [formControl]="inputCtrl" />
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                @for (ingredient of filteredIngredients | async; track ingredient) {
-                <mat-option [value]="ingredient">{{ingredient.nom}}</mat-option>
+        <div class="inputRow">
+            <mat-form-field>
+                <mat-label>Ingrédient</mat-label>
+                <input [matAutocomplete]="auto" matInput [formControl]="ingredientCtrl" />
+                <mat-autocomplete requireSelection #auto="matAutocomplete" [displayWith]="displayFn">
+                    @for (ingredient of filteredIngredients | async; track ingredient) {
+                    <mat-option [value]="ingredient">{{ingredient.nom}}</mat-option>
+                    }
+                </mat-autocomplete>
+                @if (ingredientCtrl.hasError('required')) {
+                <mat-error>Ingrédient est <strong>obligatoire</strong></mat-error>
                 }
-            </mat-autocomplete>
+            </mat-form-field>
+            <button (click)="openAddIngredientDialog()" mat-icon-button color="primary">
+                <mat-icon fontIcon="add"></mat-icon>
+            </button>
+        </div>
+
+        <mat-form-field>
+            <mat-label>Détail</mat-label>
+            <input matInput [formControl]="detailCtrl" />
+
         </mat-form-field>
-        <button (click)="openAddIngredientDialog()" mat-icon-button color="primary">
-            <mat-icon fontIcon="add"></mat-icon>
-        </button>
-    </div>
-
-    <mat-form-field>
-        <mat-label>Détail</mat-label>
-        <input matInput [(ngModel)]="ingredient.detail" />
-
-    </mat-form-field>
+    </form>
 </div>
 <div mat-dialog-actions>
     <button (click)="onCancelClick()" mat-flat-button>Cancel</button>
