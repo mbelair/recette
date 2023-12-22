@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Ajouter un ingrédient</h1>
+<h1 mat-dialog-title>{{getTitle()}}</h1>
 <div mat-dialog-content>
     <form [formGroup]="form">
         <div class="inputRow">
@@ -37,7 +37,7 @@
             <mat-form-field>
                 <mat-label>Ingrédient</mat-label>
                 <input [matAutocomplete]="auto" matInput [formControl]="ingredientCtrl" />
-                <mat-autocomplete requireSelection #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                     @for (ingredient of filteredIngredients | async; track ingredient) {
                     <mat-option [value]="ingredient">{{ingredient.nom}}</mat-option>
                     }

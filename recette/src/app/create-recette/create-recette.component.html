@@ -29,6 +29,12 @@
         <mat-list-item role="listitem" *ngFor="let ingredient of category.ingredient">
             <mat-icon matListItemIcon>fiber_manual_record</mat-icon>
             {{ingredient.quantite}} {{getUnitLabel(ingredient)}} {{ingredient.ingredient.nom}} {{ingredient.detail}}
+            <button (click)="openEditIngredientDialog(ingredient)" mat-icon-button color="primary">
+                <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button (click)="openDeleteIngredientDialog(ingredient)" mat-icon-button color="primary">
+                <mat-icon fontIcon="delete"></mat-icon>
+            </button>
         </mat-list-item>
     </mat-list>
 </div>

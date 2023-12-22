@@ -1,11 +1,16 @@
-<h1 mat-dialog-title>Ajouter une catégorie</h1>
-<div mat-dialog-content>
-    <mat-form-field>
-        <mat-label>Catégorie</mat-label>
-        <input matInput [(ngModel)]="data.nom">
-    </mat-form-field>
-</div>
-<div mat-dialog-actions>
-    <button (click)="onCancelClick()" mat-flat-button>Cancel</button>
-    <button [mat-dialog-close]="data" mat-flat-button color="primary">Ok</button>
-</div>
+<form [formGroup]="form">
+    <h1 mat-dialog-title>Ajouter une catégorie</h1>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Catégorie</mat-label>
+            <input matInput [formControl]="nomCtrl">
+            @if (nomCtrl.hasError('required')) {
+            <mat-error>Catégorie est <strong>obligatoire</strong></mat-error>
+            }
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button (click)="onCancelClick()" mat-flat-button>Cancel</button>
+        <button (click)="onOkClick()" mat-flat-button color="primary">Ok</button>
+    </div>
+</form>

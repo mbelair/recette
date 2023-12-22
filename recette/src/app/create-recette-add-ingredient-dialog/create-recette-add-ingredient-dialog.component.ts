@@ -26,14 +26,13 @@ import { UniteMesure } from '../models/uniteMesure';
   styleUrl: './create-recette-add-ingredient-dialog.component.scss'
 })
 export class CreateRecetteAddIngredientDialogComponent {
-  protected ingredient: IngredientRecette = new IngredientRecette();
   protected recette: Recette;
 
   protected categorieIngredient: CategorieIngredient[] = [];
 
   filteredIngredients: Observable<Ingredient[]>;
 
-  ingredientCtrl = new FormControl('', [Validators.required]);
+  ingredientCtrl = new FormControl(null, [Validators.required]);
   categoryCtrl = new FormControl(0);
   quantiteCtrl = new FormControl<number>(null, [Validators.required]);
   uniteCtrl = new FormControl('', [Validators.required]);
@@ -47,17 +46,27 @@ export class CreateRecetteAddIngredientDialogComponent {
     detailCtrl: this.detailCtrl
   })
 
-
+  editingIngredient: IngredientRecette = null;
   readonly UNITE_GROUP = UniteMesure.UNITE_GROUP;
 
   constructor(
     public dialogRef: MatDialogRef<CreateRecetteAddIngredientDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) protected data: { recette: Recette },
+    @Inject(MAT_DIALOG_DATA) protected data: { recette: Recette, ingredient: IngredientRecette },
     public dialog: MatDialog,
     private appService: AppService
   ) {
-
     this.recette = data.recette;
+
+    if (data.ingredient) {
+      const chosenCategory = this.recette.categorieIngredient.find(ci => ci.ingredient.includes(data.ingredient));
+      this.ingredientCtrl.setValue(data.ingredient.ingredient);
+      this.categoryCtrl.setValue(chosenCategory.id);
+      this.quantiteCtrl.setValue(data.ingredient.quantite)
+      this.uniteCtrl.setValue(data.ingredient.unite);
+      this.detailCtrl.setValue(data.ingredient.detail);
+      this.editingIngredient = data.ingredient;
+    }
+
 
     this.categorieIngredient = [];
     this.recette.categorieIngredient.map(ci => this.categorieIngredient.push(ci));
@@ -84,14 +93,28 @@ export class CreateRecetteAddIngredientDialogComponent {
     return i && i.nom ? i.nom : '';
   }
 
+  getTitle() {
+    if (this.editingIngredient) {
+      return "Modifier un ingrédient";
+    } else {
+      return "Ajouter un ingrédient";
+    }
+  }
+
   onCancelClick(): void {
     this.dialogRef.close(null);
   }
   onOkClick(): void {
+    if (typeof this.ingredientCtrl.value === 'string') {
+      this.ingredientCtrl.setValue('');
+    }
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
+
+    let ingredient = this.editingIngredient ? this.editingIngredient : new IngredientRecette();
+
     this.categorieIngredient.map(ci => {
       if (!this.recette.categorieIngredient.some(rci => rci.id === ci.id)) {
         this.recette.categorieIngredient.push(ci);
@@ -99,17 +122,19 @@ export class CreateRecetteAddIngredientDialogComponent {
     })
 
     const chosenCategory = this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue());
-    this.ingredient.ordre = chosenCategory.ingredient.length;
-    this.ingredient.id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
-      return Math.max(accumulator, currentValue.ingredient.reduce((accumulator2, currentValue2) => {
-        return Math.max(accumulator2, currentValue2.id);
-      }, -1));
-    }, -1);
-    this.ingredient.ingredient = typeof this.ingredientCtrl.value === 'string' ? null : (this.ingredientCtrl.value as Ingredient);
-    this.ingredient.detail = this.detailCtrl.value;
-    this.ingredient.quantite = this.quantiteCtrl.value;
-    this.ingredient.unite = this.uniteCtrl.value;
-    this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue()).ingredient.push(this.ingredient);
+    ingredient.ingredient = typeof this.ingredientCtrl.value === 'string' ? null : (this.ingredientCtrl.value as Ingredient);
+    ingredient.detail = this.detailCtrl.value;
+    ingredient.quantite = this.quantiteCtrl.value;
+    ingredient.unite = this.uniteCtrl.value;
+    if (!this.editingIngredient) {
+      ingredient.ordre = chosenCategory.ingredient.length;
+      ingredient.id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
+        return Math.max(accumulator, currentValue.ingredient.reduce((accumulator2, currentValue2) => {
+          return Math.max(accumulator2, currentValue2.id);
+        }, -1));
+      }, -1);
+      this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue()).ingredient.push(ingredient);
+    }
     this.dialogRef.close();
   }
 

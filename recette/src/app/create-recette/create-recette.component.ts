@@ -11,6 +11,8 @@ import { CreateRecetteAddIngredientDialogComponent } from '../create-recette-add
 import { Recette } from '../models/recette';
 import { UniteMesure } from '../models/uniteMesure';
 import { IngredientRecette } from '../models/ingredientRecette';
+import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
+import { DialogRef } from '@angular/cdk/dialog';
 
 
 @Component({
@@ -30,11 +32,38 @@ export class CreateRecetteComponent {
 
   openAddIngredientDialog() {
     this.dialog.open(CreateRecetteAddIngredientDialogComponent, {
-      data: { recette: this.recette },
+      data: {
+        recette: this.recette,
+        ingredient: null
+      },
     });
   }
 
   getUnitLabel(ingredient: IngredientRecette): string {
     return UniteMesure.fromTypeCode(ingredient.unite).getFormatedLabel(ingredient.quantite > 1);
+  }
+
+  openEditIngredientDialog(ingredient: IngredientRecette) {
+    this.dialog.open(CreateRecetteAddIngredientDialogComponent, {
+      data: {
+        recette: this.recette,
+        ingredient: ingredient
+      },
+    });
+  }
+
+  openDeleteIngredientDialog(ingredient: IngredientRecette) {
+    const dialogRef = this.dialog.open(GenericDeleteDialogComponent, {
+      data: {
+        title: "Supprimer un ingrédient"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        const category = this.recette.categorieIngredient.find(ci => ci.ingredient.includes(ingredient));
+        category.ingredient.splice(category.ingredient.indexOf(ingredient), 1);
+      }
+    });
   }
 }
