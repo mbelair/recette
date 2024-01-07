@@ -13,6 +13,8 @@ import { UniteMesure } from '../models/uniteMesure';
 import { IngredientRecette } from '../models/ingredientRecette';
 import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
 import { DialogRef } from '@angular/cdk/dialog';
+import { Preparation } from '../models/preparation';
+import { CreateRecetteAddPreparationDialogComponentComponent } from '../create-recette-add-preparation-dialog-component/create-recette-add-preparation-dialog-component.component';
 
 
 @Component({
@@ -65,5 +67,42 @@ export class CreateRecetteComponent {
         category.ingredient.splice(category.ingredient.indexOf(ingredient), 1);
       }
     });
+  }
+
+  openEditPreparationtDialog(preparation: Preparation) {
+    this.dialog.open(CreateRecetteAddPreparationDialogComponentComponent, {
+      data: {
+        recette: this.recette,
+        step: preparation
+      },
+    });
+  }
+
+  openDeletePreparationtDialog(preparation: Preparation) {
+    const dialogRef = this.dialog.open(GenericDeleteDialogComponent, {
+      data: {
+        title: "Supprimer une étape"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        const category = this.recette.categoriePreparation.find(ci => ci.preparation.includes(preparation));
+        category.preparation.splice(category.preparation.indexOf(preparation), 1);
+      }
+    });
+  }
+
+  openAddPreparationDialog() {
+    this.dialog.open(CreateRecetteAddPreparationDialogComponentComponent, {
+      data: {
+        recette: this.recette,
+        step: null
+      },
+    });
+  }
+
+  createRecette() {
+
   }
 }

@@ -15,7 +15,7 @@ export class Recette {
 
     constructor(defaultValues = false) {
         this.categorieIngredient = [new CategorieIngredient(defaultValues)];
-        this.categoriePreparation = [];
+        this.categoriePreparation = [new CategoriePreparation(defaultValues)];
         this.tags = [];
     }
 }

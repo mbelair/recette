@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { CategorieIngredient } from '../models/categorieIngredient';
+import { BaseCategorie } from '../models/BaseCategorie';
 
 @Component({
   selector: 'app-create-recette-add-category-dialog',
@@ -21,7 +21,7 @@ export class CreateRecetteAddCategoryDialogComponent {
   });
 
 
-  protected data: CategorieIngredient = new CategorieIngredient();
+  protected data: BaseCategorie = new BaseCategorie();
   constructor(public dialogRef: MatDialogRef<CreateRecetteAddCategoryDialogComponent>) { }
 
   onCancelClick(): void {

@@ -12,6 +12,7 @@ import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } 
 import { AppService } from '../app.service';
 import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 import { CreateRecetteAddCategoryDialogComponent } from '../create-recette-add-category-dialog/create-recette-add-category-dialog.component';
+import { BaseCategorie } from '../models/BaseCategorie';
 import { CategorieIngredient } from '../models/categorieIngredient';
 import { Ingredient } from '../models/ingredient';
 import { IngredientRecette } from '../models/ingredientRecette';
@@ -122,17 +123,25 @@ export class CreateRecetteAddIngredientDialogComponent {
     })
 
     const chosenCategory = this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue());
+    const previousCategory = this.recette.categorieIngredient.find(cp => cp.ingredient.find(p => p.id === ingredient.id));
+
     ingredient.ingredient = typeof this.ingredientCtrl.value === 'string' ? null : (this.ingredientCtrl.value as Ingredient);
     ingredient.detail = this.detailCtrl.value;
     ingredient.quantite = this.quantiteCtrl.value;
     ingredient.unite = this.uniteCtrl.value;
     if (!this.editingIngredient) {
-      ingredient.ordre = chosenCategory.ingredient.length;
       ingredient.id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
         return Math.max(accumulator, currentValue.ingredient.reduce((accumulator2, currentValue2) => {
           return Math.max(accumulator2, currentValue2.id);
         }, -1));
       }, -1);
+    }
+
+    if (chosenCategory.id !== previousCategory?.id) {
+      if (previousCategory) {
+        previousCategory.ingredient.splice(previousCategory.ingredient.indexOf(this.editingIngredient), 1);
+      }
+      ingredient.ordre = chosenCategory.ingredient.length;
       this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue()).ingredient.push(ingredient);
     }
     this.dialogRef.close();
@@ -142,12 +151,12 @@ export class CreateRecetteAddIngredientDialogComponent {
     const dialogRef = this.dialog.open(CreateRecetteAddCategoryDialogComponent, {
     });
 
-    dialogRef.afterClosed().subscribe((result: CategorieIngredient) => {
+    dialogRef.afterClosed().subscribe((result: BaseCategorie) => {
       result.ordre = this.categorieIngredient.length;
       result.id = 1 + this.categorieIngredient.reduce((accumulator, currentValue) => {
         return Math.max(accumulator, currentValue.id);
       }, -1);
-      this.categorieIngredient.push(result);
+      this.categorieIngredient.push(CategorieIngredient.fromBase(result));
       this.categoryCtrl.setValue(result.id);
     });
   }

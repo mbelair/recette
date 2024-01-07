@@ -89,12 +89,12 @@ export class AppService {
   }
 
   generatePreparation(): CategoriePreparation[] {
-    let toReturn: CategoriePreparation = {
-      id: 1,
-      nom: "asdf",
-      ordre: 0,
-      preparation: []
-    };
+    let toReturn: CategoriePreparation = new CategoriePreparation();
+    toReturn.id = 1;
+    toReturn.nom = "asdf";
+    toReturn.ordre = 0;
+    toReturn.preparation = [];
+
     let numberOfSteps = this.getRandomIntFromInterval(2, 10);
     for (let i = 0; i < numberOfSteps; i++) {
       let step: Preparation = {
