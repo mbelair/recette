@@ -25,22 +25,12 @@ namespace RecetteApi.DbFacade
 
         public async Task CreateIngredient(Ingredient newIngredient)
         {
-            await db.Query("Ingredient").InsertAsync(new
-            {
-                newIngredient.Nom,
-                newIngredient.Filterable,
-                Category = newIngredient.Category.ToString(),
-            });
+            await db.Query("Ingredient").InsertAsync(newIngredient.toDbModel());
         }
 
         public async Task UpdateIngredient(int id, Ingredient updatedIngredient)
         {
-            await db.Query("Ingredient").Where("Id", id).UpdateAsync(new
-            {
-                updatedIngredient.Nom,
-                updatedIngredient.Filterable,
-                Category = updatedIngredient.Category.ToString(),
-            });
+            await db.Query("Ingredient").Where("Id", id).UpdateAsync(updatedIngredient.toDbModel());
         }
 
         public async Task DeleteIngredient(int id)

@@ -2,7 +2,7 @@
 
 namespace RecetteApi.Models
 {
-    public class Ingredient
+    public class Ingredient : IDbModel
     {
 
         public int Id { get; set; }
@@ -13,6 +13,16 @@ namespace RecetteApi.Models
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public IngredientCategoryEnum Category { get; set; }
+
+        public object toDbModel()
+        {
+            return new
+            {
+                this.Nom,
+                this.Filterable,
+                Category = this.Category.ToString(),
+            };
+        }
 
     }
 }
