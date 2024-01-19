@@ -1,12 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace RecetteApi.Models
+﻿namespace RecetteApi.Models
 {
     public class IngredientRecette
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
         public Ingredient? Ingredient { get; set; }

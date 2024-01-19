@@ -1,15 +1,9 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace RecetteApi.Models
+﻿namespace RecetteApi.Models
 {
     public class Recette
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        public string? Nom { get; set; }
         public int TempsPreparation { get; set; }
         public int TempsCuisson { get; set; }
         public DateTime Date_creation { get; set; }

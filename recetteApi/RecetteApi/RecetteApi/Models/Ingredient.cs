@@ -1,19 +1,18 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using System.Text.Json.Serialization;
 
 namespace RecetteApi.Models
 {
     public class Ingredient
     {
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public int Id { get; set; }
 
-        public string Nom { get; set; }
+        public string? Nom { get; set; }
 
         public bool Filterable { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public IngredientCategoryEnum Category { get; set; }
+
     }
 }

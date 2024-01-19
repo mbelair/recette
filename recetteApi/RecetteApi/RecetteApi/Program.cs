@@ -1,14 +1,22 @@
-using RecetteApi.Models;
-using RecetteApi.Services;
+using Npgsql;
+using RecetteApi.DbFacade;
+using SqlKata.Compilers;
+using SqlKata.Execution;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<RecetteDatabaseSettings>(
-    builder.Configuration.GetSection("RecetteDatabase"));
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetSection("RecetteDatabase").GetSection("ConnectionString").Value!);
+builder.Services.AddSingleton<DatabaseController>();
 
-builder.Services.AddSingleton<RecetteService>();
-// Add services to the container.
+builder.Services.AddTransient((e) =>
+{
+    var connection = NpgsqlDataSource.Create(builder.Configuration.GetSection("RecetteDatabase").GetSection("ConnectionString").Value!);
+
+    var compiler = new PostgresCompiler();
+
+    return new QueryFactory(connection.OpenConnection(), compiler);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
