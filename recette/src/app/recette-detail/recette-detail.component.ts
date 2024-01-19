@@ -21,8 +21,8 @@ export class RecetteDetailComponent {
 
   getRecette() {
     if (this.id >= 0) {
-      return this.service.recettes[this.id];
+      return this.service.recettes.value[this.id];
     }
-    return this.service.recettes[0];
+    return this.service.recettes.value[0];
   }
 }
