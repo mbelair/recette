@@ -7,6 +7,7 @@ export class Recette {
     nom: string;
     tempsPreparation: number;
     tempsCuisson: number;
+    nombrePortion: number;
     date_creation: Date;
     date_ouverture: Date;
     tags: Tag[];

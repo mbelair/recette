@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +20,7 @@ import { UniteMesure } from '../models/uniteMesure';
 @Component({
   selector: 'app-create-recette',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatListModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
+  imports: [CommonModule, MatFormFieldModule, MatListModule, FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
   templateUrl: './create-recette.component.html',
   styleUrl: './create-recette.component.scss'
 })

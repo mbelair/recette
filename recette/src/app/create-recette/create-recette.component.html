@@ -2,19 +2,19 @@
 <h2>Information</h2>
 <mat-form-field>
     <mat-label>Nom de la recette</mat-label>
-    <input matInput />
+    <input [(ngModel)]="recette.nom" matInput />
 </mat-form-field>
 <mat-form-field>
     <mat-label>Nombre de portions</mat-label>
-    <input matInput type="number" />
+    <input [(ngModel)]="recette.nombrePortion" matInput type="number" />
 </mat-form-field>
 <mat-form-field>
     <mat-label>Temps de préparation</mat-label>
-    <input matInput type="number" />
+    <input [(ngModel)]="recette.tempsPreparation" matInput type="number" />
 </mat-form-field>
 <mat-form-field>
     <mat-label>Temps de cuisson</mat-label>
-    <input matInput type="number" />
+    <input [(ngModel)]="recette.tempsCuisson" matInput type="number" />
 </mat-form-field>
 <h2>Ingrédients</h2>
 <div class="ingredientHeader">
