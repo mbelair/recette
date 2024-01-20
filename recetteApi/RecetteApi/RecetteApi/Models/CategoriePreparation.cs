@@ -2,6 +2,6 @@
 {
     public class CategoriePreparation : BaseCategorie
     {
-        public List<Preparation>? Preparation { get; set; }
+        public List<Preparation> Preparation { get; set; } = new List<Preparation>();
     }
 }

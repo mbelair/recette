@@ -9,7 +9,6 @@ namespace RecetteApi.Models
 
         public string? Nom { get; set; }
 
-        public bool Filterable { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public IngredientCategoryEnum Category { get; set; }
@@ -19,7 +18,6 @@ namespace RecetteApi.Models
             return new
             {
                 this.Nom,
-                this.Filterable,
                 Category = this.Category.ToString(),
             };
         }

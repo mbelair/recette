@@ -7,14 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { AppService } from '../app.service';
 import { CreateRecetteAddIngredientDialogComponent } from '../create-recette-add-ingredient-dialog/create-recette-add-ingredient-dialog.component';
+import { CreateRecetteAddPreparationDialogComponentComponent } from '../create-recette-add-preparation-dialog-component/create-recette-add-preparation-dialog-component.component';
+import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
+import { IngredientRecette } from '../models/ingredientRecette';
+import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
 import { UniteMesure } from '../models/uniteMesure';
-import { IngredientRecette } from '../models/ingredientRecette';
-import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
-import { DialogRef } from '@angular/cdk/dialog';
-import { Preparation } from '../models/preparation';
-import { CreateRecetteAddPreparationDialogComponentComponent } from '../create-recette-add-preparation-dialog-component/create-recette-add-preparation-dialog-component.component';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class CreateRecetteComponent {
 
   protected recette: Recette = new Recette(true);
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private appService: AppService) {
 
   }
 
@@ -103,6 +103,10 @@ export class CreateRecetteComponent {
   }
 
   createRecette() {
-
+    this.appService.createRecette(this.recette).subscribe({
+      next: () => {
+        alert('YAY!');
+      }
+    })
   }
 }

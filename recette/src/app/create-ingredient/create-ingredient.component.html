@@ -5,15 +5,12 @@
         <input matInput [(ngModel)]="data.nom">
     </mat-form-field>
 
-    <mat-label class="filterLabel">Disponible dans les filtres</mat-label>
-    <mat-button-toggle-group [(ngModel)]="data.filterable" name="fontStyle" aria-label="Font Style">
-        <mat-button-toggle [value]="true">Oui</mat-button-toggle>
-        <mat-button-toggle [value]="false">Non</mat-button-toggle>
-    </mat-button-toggle-group>
     <mat-form-field>
         <mat-label>Catégorie</mat-label>
         <mat-select [(ngModel)]="data.category">
-            <mat-option *ngFor="let category of categories" [value]="category.typeCode">{{category.label}}</mat-option>
+            <mat-option *ngFor="let category of categories " [value]="category">
+                {{getCategoryLabel(category)}}
+            </mat-option>
         </mat-select>
     </mat-form-field>
 

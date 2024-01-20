@@ -1,13 +1,24 @@
 ﻿namespace RecetteApi.Models
 {
-    public class BaseCategorie
+    public abstract class BaseCategorie
     {
-        public string? Id { get; set; }
+        public int Id { get; set; }
 
         public string? Nom { get; set; }
 
         public int Ordre { get; set; }
 
         public bool IsDefaultCategory { get; set; }
+
+        public object toDbModel(int recetteId)
+        {
+            return new
+            {
+                this.Nom,
+                this.Ordre,
+                this.IsDefaultCategory,
+                Recette_Id = recetteId
+            };
+        }
     }
 }

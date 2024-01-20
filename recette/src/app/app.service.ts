@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
-import { Ingredient } from './models/ingredient';
+import { Ingredient, IngredientCategoryEnum } from './models/ingredient';
 import { Recette } from './models/recette';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 export class AppService {
   public readonly url = '/api'
 
-  ingredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject([]);
   allIngredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject(null);
   recettes: BehaviorSubject<Recette[]> = new BehaviorSubject([]);
 
@@ -49,12 +48,17 @@ export class AppService {
   }
 
   createIngredient(ingredient: Ingredient): Observable<void> {
-    const allIngredients = this.ingredients.value.slice();
-    allIngredients.push(ingredient);
-    this.ingredients.next(allIngredients);
-    return of(null);
+    return this.http.post<void>(this.url + "/Ingredient", ingredient).pipe(
+      tap({
+        next: () => {
+          this.allIngredients.next(null);
+        }
+      })
+    );
   }
 
-
+  createRecette(recette: Recette): Observable<void> {
+    return this.http.post<void>(this.url + "/Recette", recette);
+  }
 
 }

@@ -15,33 +15,11 @@ public class RecetteController : ControllerBase
         _databaseController = databaseController;
 
 
-    [HttpGet]
-    public async Task<IEnumerable<Ingredient>> Get()
-    {
-        return await this._databaseController.GetAllIngredientsAsync();
-    }
-
-    [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Ingredient>> Get(string id)
-    {
-        return NoContent();
-    }
-
     [HttpPost]
-    public async Task<IActionResult> Post(Ingredient newIngredient)
+    public async Task<IActionResult> Post(Recette newRecette)
     {
-        return NoContent();
+        await this._databaseController.CreateRecette(newRecette);
+        return Ok();
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Ingredient updatedIngredient)
-    {
-        return NoContent();
-    }
-
-    [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> Delete(string id)
-    {
-        return NoContent();
-    }
 }

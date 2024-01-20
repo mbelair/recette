@@ -83,7 +83,7 @@ export class CreateRecetteAddIngredientDialogComponent {
       }),
     );
 
-    this.appService.ingredients.subscribe({
+    this.appService.allIngredients.subscribe({
       next: () => {
         this.ingredientCtrl.updateValueAndValidity();
       }

@@ -2,6 +2,6 @@
 {
     public class CategorieIngredient : BaseCategorie
     {
-        public List<IngredientRecette>? Ingredient { get; set; }
+        public List<IngredientRecette> Ingredient { get; set; } = new List<IngredientRecette>();
     }
 }
