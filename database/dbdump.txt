@@ -1,0 +1,342 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.1
+-- Dumped by pg_dump version 16.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: CategorieIngredient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."CategorieIngredient" (
+    "Id" integer NOT NULL,
+    "Nom" character varying NOT NULL,
+    "Ordre" integer NOT NULL,
+    "IsDefaultCategory" boolean,
+    "Recette_Id" integer
+);
+
+
+ALTER TABLE public."CategorieIngredient" OWNER TO postgres;
+
+--
+-- Name: CategorieIngredient_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."CategorieIngredient" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."CategorieIngredient_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: CategoriePreparation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."CategoriePreparation" (
+    "Id" integer NOT NULL,
+    "Nom" character varying NOT NULL,
+    "Ordre" integer NOT NULL,
+    "IsDefaultCategory" boolean,
+    "Recette_Id" integer
+);
+
+
+ALTER TABLE public."CategoriePreparation" OWNER TO postgres;
+
+--
+-- Name: CategoriePreparation_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."CategoriePreparation" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."CategoriePreparation_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: Ingredient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Ingredient" (
+    "Id" integer NOT NULL,
+    "Nom" character varying NOT NULL,
+    "Category" character varying NOT NULL
+);
+
+
+ALTER TABLE public."Ingredient" OWNER TO postgres;
+
+--
+-- Name: IngredientRecette; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."IngredientRecette" (
+    "Ingredient_Id" integer NOT NULL,
+    "CategorieIngredient_Id" integer NOT NULL,
+    "Quantite" numeric NOT NULL,
+    "Unite" character varying NOT NULL,
+    "Ordre" integer NOT NULL,
+    "Detail" character varying
+);
+
+
+ALTER TABLE public."IngredientRecette" OWNER TO postgres;
+
+--
+-- Name: Ingredient_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Ingredient" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Ingredient_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: Preparation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Preparation" (
+    "Id" integer NOT NULL,
+    "Text" character varying NOT NULL,
+    "Ordre" integer NOT NULL,
+    "CategoriePreparation_Id" integer NOT NULL
+);
+
+
+ALTER TABLE public."Preparation" OWNER TO postgres;
+
+--
+-- Name: Preparation_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Preparation" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Preparation_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: Recette; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Recette" (
+    "Id" integer NOT NULL,
+    "TempsPreparation" integer NOT NULL,
+    "TempsCuisson" integer NOT NULL,
+    "Date_creation" date NOT NULL,
+    "Date_ouverture" date
+);
+
+
+ALTER TABLE public."Recette" OWNER TO postgres;
+
+--
+-- Name: Recette_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Recette" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Recette_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: Tag; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Tag" (
+    "Id" integer NOT NULL,
+    "Nom" character varying NOT NULL
+);
+
+
+ALTER TABLE public."Tag" OWNER TO postgres;
+
+--
+-- Name: TagRecette; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."TagRecette" (
+    "Tag_Id" integer NOT NULL,
+    "Recette_Id" integer NOT NULL
+);
+
+
+ALTER TABLE public."TagRecette" OWNER TO postgres;
+
+--
+-- Name: Tag_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Tag" ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Tag_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: CategorieIngredient CategorieIngredient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."CategorieIngredient"
+    ADD CONSTRAINT "CategorieIngredient_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: CategoriePreparation CategoriePreparation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."CategoriePreparation"
+    ADD CONSTRAINT "CategoriePreparation_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: IngredientRecette IngredientRecette_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."IngredientRecette"
+    ADD CONSTRAINT "IngredientRecette_pkey" PRIMARY KEY ("Ingredient_Id", "CategorieIngredient_Id");
+
+
+--
+-- Name: Ingredient Ingredient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Ingredient"
+    ADD CONSTRAINT "Ingredient_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: Preparation Preparation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Preparation"
+    ADD CONSTRAINT "Preparation_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: Recette Recette_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Recette"
+    ADD CONSTRAINT "Recette_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: TagRecette TagRecette_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TagRecette"
+    ADD CONSTRAINT "TagRecette_pkey" PRIMARY KEY ("Tag_Id", "Recette_Id");
+
+
+--
+-- Name: Tag Tag_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Tag"
+    ADD CONSTRAINT "Tag_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- Name: IngredientRecette IngredientRecette_CategorieIngredient_Id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."IngredientRecette"
+    ADD CONSTRAINT "IngredientRecette_CategorieIngredient_Id_fkey" FOREIGN KEY ("CategorieIngredient_Id") REFERENCES public."CategorieIngredient"("Id");
+
+
+--
+-- Name: IngredientRecette IngredientRecette_Ingredient_Id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."IngredientRecette"
+    ADD CONSTRAINT "IngredientRecette_Ingredient_Id_fkey" FOREIGN KEY ("Ingredient_Id") REFERENCES public."Ingredient"("Id");
+
+
+--
+-- Name: Preparation Preparation_CategoriePreparation_Id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Preparation"
+    ADD CONSTRAINT "Preparation_CategoriePreparation_Id_fkey" FOREIGN KEY ("CategoriePreparation_Id") REFERENCES public."CategoriePreparation"("Id");
+
+
+--
+-- Name: CategorieIngredient fk_CategorieIngredient_recette; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."CategorieIngredient"
+    ADD CONSTRAINT "fk_CategorieIngredient_recette" FOREIGN KEY ("Recette_Id") REFERENCES public."Recette"("Id") NOT VALID;
+
+
+--
+-- Name: CategoriePreparation fk_CategoriePreparation_recette; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."CategoriePreparation"
+    ADD CONSTRAINT "fk_CategoriePreparation_recette" FOREIGN KEY ("Recette_Id") REFERENCES public."Recette"("Id") NOT VALID;
+
+
+--
+-- Name: TagRecette fk_TagRecette_recette; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TagRecette"
+    ADD CONSTRAINT "fk_TagRecette_recette" FOREIGN KEY ("Recette_Id") REFERENCES public."Recette"("Id");
+
+
+--
+-- Name: TagRecette fk_TagRecette_tag; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TagRecette"
+    ADD CONSTRAINT "fk_TagRecette_tag" FOREIGN KEY ("Tag_Id") REFERENCES public."Tag"("Id");
+
+
+--
+-- PostgreSQL database dump complete
+--
+
