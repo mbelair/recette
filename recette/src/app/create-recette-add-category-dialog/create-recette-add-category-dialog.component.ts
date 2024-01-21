@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { BaseCategorie } from '../models/BaseCategorie';
+import { BaseCategorie } from '../models/baseCategorie';
 
 @Component({
   selector: 'app-create-recette-add-category-dialog',

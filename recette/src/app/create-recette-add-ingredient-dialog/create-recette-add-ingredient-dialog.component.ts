@@ -12,7 +12,7 @@ import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } 
 import { AppService } from '../app.service';
 import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 import { CreateRecetteAddCategoryDialogComponent } from '../create-recette-add-category-dialog/create-recette-add-category-dialog.component';
-import { BaseCategorie } from '../models/BaseCategorie';
+import { BaseCategorie } from '../models/baseCategorie';
 import { CategorieIngredient } from '../models/categorieIngredient';
 import { Ingredient } from '../models/ingredient';
 import { IngredientRecette } from '../models/ingredientRecette';

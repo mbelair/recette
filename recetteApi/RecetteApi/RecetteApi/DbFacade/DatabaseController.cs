@@ -13,6 +13,7 @@ namespace RecetteApi.DbFacade
             this.db = db;
         }
 
+        #region Ingredient
         public async Task<IEnumerable<Ingredient>> GetAllIngredientsAsync()
         {
             return await db.Query("Ingredient").Select("Id", "Nom", "Category").GetAsync<Ingredient>();
@@ -37,7 +38,8 @@ namespace RecetteApi.DbFacade
         {
             await db.Query("Ingredient").Where("Id", id).DeleteAsync();
         }
-
+        #endregion
+        #region Recette
         public async Task CreateRecette(Recette newRecette)
         {
             using (var tranaction = db.Connection.BeginTransaction())
@@ -76,5 +78,12 @@ namespace RecetteApi.DbFacade
                 tranaction.Commit();
             }
         }
+        #endregion
+        #region Tag
+        public async Task<IEnumerable<Tag>> GetAllTagsAsync()
+        {
+            return await db.Query("Tag").GetAsync<Tag>();
+        }
+        #endregion
     }
 }

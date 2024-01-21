@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,12 +15,15 @@ import { IngredientRecette } from '../models/ingredientRecette';
 import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
 import { UniteMesure } from '../models/uniteMesure';
-
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Tag } from '../models/tag';
+import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-create-recette',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatListModule, FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
+  imports: [CommonModule, MatFormFieldModule, MatChipsModule, MatListModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
   templateUrl: './create-recette.component.html',
   styleUrl: './create-recette.component.scss'
 })
@@ -28,8 +31,25 @@ export class CreateRecetteComponent {
 
   protected recette: Recette = new Recette(true);
 
-  constructor(public dialog: MatDialog, private appService: AppService) {
+  filteredTags: Observable<Tag[]>;
+  tagsCtrl = new FormControl(null, []);
+  tags: Tag[] = [];
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
+  constructor(public dialog: MatDialog, private appService: AppService) {
+    this.filteredTags = this.tagsCtrl.valueChanges.pipe(
+      startWith(null),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((searchTerm: string | Tag) => {
+        const nom = typeof searchTerm === 'string' ? searchTerm : searchTerm?.nom;
+        return this.appService.getAllTags(nom)
+      }),
+    );
+  }
+
+  displayFn(i: Tag): string {
+    return i && i.nom ? i.nom : '';
   }
 
   openAddIngredientDialog() {
@@ -109,4 +129,35 @@ export class CreateRecetteComponent {
       }
     })
   }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    let tag: Tag = this.appService.allTags.value.find(t => t.nom === value);
+
+    // Add our ingredient
+    if (value) {
+      this.tags.push(tag);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.tagsCtrl.setValue(null);
+  }
+
+  remove(tag: Tag): void {
+    const index = this.tags.indexOf(tag);
+
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.tags.push(event.option.value);
+    this.input.nativeElement.value = '';
+    this.tagsCtrl.setValue(null);
+  }
+
 }

@@ -4,6 +4,7 @@ import { Ingredient, IngredientCategoryEnum } from './models/ingredient';
 import { Recette } from './models/recette';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
+import { Tag } from './models/tag';
 
 
 
@@ -14,13 +15,14 @@ export class AppService {
   public readonly url = '/api'
 
   allIngredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject(null);
+  allTags: BehaviorSubject<Tag[]> = new BehaviorSubject(null);
   recettes: BehaviorSubject<Recette[]> = new BehaviorSubject([]);
 
   constructor(private readonly http: HttpClient) {
 
   }
 
-  getAllIngredients(search: String): Observable<Ingredient[]> {
+  getAllIngredients(search: string): Observable<Ingredient[]> {
     if (!this.allIngredients.value) {
       return this.http.get<Ingredient[]>(this.url + "/Ingredient").pipe(
         tap({
@@ -37,14 +39,46 @@ export class AppService {
     }
   }
 
-  filterIngredients(search: String, ingredients: Ingredient[]): Ingredient[] {
-    if (search) {
-      const filterValue = search.toLowerCase();
+  getAllTags(search: string): Observable<Tag[]> {
+    if (!this.allTags.value) {
+      return this.http.get<Tag[]>(this.url + "/Tag").pipe(
+        tap({
+          next: (value) => {
+            this.allTags.next(value);
+          }
+        }),
+        map((value) => {
+          return this.filterTags(search, value);
+        })
+      );
+    } else {
+      return of(this.filterTags(search, this.allTags.value));
+    }
+  }
 
-      return ingredients.filter(ingredient => ingredient.nom.toLowerCase().includes(filterValue));
+
+  filterTags(search: string, tags: Tag[]): Tag[] {
+    if (search) {
+      const filterValue = this.normalize(search);
+
+      return tags.filter(tag => this.normalize(tag.nom).includes(filterValue));
+    } else {
+      return tags;
+    }
+  }
+
+  filterIngredients(search: string, ingredients: Ingredient[]): Ingredient[] {
+    if (search) {
+      const filterValue = this.normalize(search);
+
+      return ingredients.filter(ingredient => this.normalize(ingredient.nom).includes(filterValue));
     } else {
       return ingredients;
     }
+  }
+
+  normalize(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
   }
 
   createIngredient(ingredient: Ingredient): Observable<void> {

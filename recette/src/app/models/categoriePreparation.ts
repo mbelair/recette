@@ -1,4 +1,4 @@
-import { BaseCategorie } from "./BaseCategorie";
+import { BaseCategorie } from "./baseCategorie";
 import { Preparation } from "./preparation";
 
 export class CategoriePreparation extends BaseCategorie {

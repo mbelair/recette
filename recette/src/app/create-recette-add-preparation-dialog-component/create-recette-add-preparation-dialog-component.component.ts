@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CreateRecetteAddCategoryDialogComponent } from '../create-recette-add-category-dialog/create-recette-add-category-dialog.component';
-import { BaseCategorie } from '../models/BaseCategorie';
+import { BaseCategorie } from '../models/baseCategorie';
 import { CategoriePreparation } from '../models/categoriePreparation';
 import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
