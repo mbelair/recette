@@ -4,5 +4,13 @@
     {
         public int Id { get; set; }
         public string? Nom { get; set; }
+
+        public object toDbModel()
+        {
+            return new
+            {
+                this.Nom
+            };
+        }
     }
 }

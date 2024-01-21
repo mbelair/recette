@@ -68,9 +68,14 @@ namespace RecetteApi.DbFacade
 
                 foreach (Tag tag in newRecette.Tags)
                 {
+                    int tagId = tag.Id;
+                    if (tagId == -1)
+                    {
+                        tagId = await db.Query("Tag").InsertGetIdAsync<int>(tag.toDbModel());
+                    }
                     await db.Query("TagRecette").InsertAsync(new
                     {
-                        Tag_Id = tag.Id,
+                        Tag_Id = tagId,
                         Recette_Id = recetteId
                     });
                 }

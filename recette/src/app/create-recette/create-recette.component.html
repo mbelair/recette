@@ -16,26 +16,26 @@
     <mat-label>Temps de cuisson</mat-label>
     <input [(ngModel)]="recette.tempsCuisson" matInput type="number" />
 </mat-form-field>
-<!-- <mat-form-field>
+<mat-form-field>
     <mat-label>Étiquettes</mat-label>
     <mat-chip-grid #chipGrid>
         @for (tag of tags; track tag) {
         <mat-chip-row (removed)="remove(tag)">
-            {{tag}}
+            {{tag.nom}}
             <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
             </button>
         </mat-chip-row>
         }
     </mat-chip-grid>
-    <input #input [formControl]="tagsCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+    <input #input [matAutocomplete]="auto" matInput [formControl]="tagsCtrl" [matChipInputFor]="chipGrid"
         (matChipInputTokenEnd)="add($event)" />
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        @for (tag of filteredTags | async; track ) {
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event)">
+        @for (tag of filteredTags | async; track tag) {
         <mat-option [value]="tag">{{tag.nom}}</mat-option>
         }
     </mat-autocomplete>
-</mat-form-field> -->
+</mat-form-field>
 <h2>Ingrédients</h2>
 <div class="ingredientHeader">
     <button (click)="openAddIngredientDialog()" mat-raised-button color="primary">

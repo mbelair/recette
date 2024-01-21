@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { AppService } from '../app.service';
 import { CreateRecetteAddIngredientDialogComponent } from '../create-recette-add-ingredient-dialog/create-recette-add-ingredient-dialog.component';
 import { CreateRecetteAddPreparationDialogComponentComponent } from '../create-recette-add-preparation-dialog-component/create-recette-add-preparation-dialog-component.component';
@@ -14,11 +17,8 @@ import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-d
 import { IngredientRecette } from '../models/ingredientRecette';
 import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
-import { UniteMesure } from '../models/uniteMesure';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Tag } from '../models/tag';
-import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { UniteMesure } from '../models/uniteMesure';
 
 @Component({
   selector: 'app-create-recette',
@@ -123,6 +123,7 @@ export class CreateRecetteComponent {
   }
 
   createRecette() {
+    this.recette.tags = [...new Set(this.tags)];
     this.appService.createRecette(this.recette).subscribe({
       next: () => {
         alert('YAY!');
@@ -134,6 +135,11 @@ export class CreateRecetteComponent {
     const value = (event.value || '').trim();
 
     let tag: Tag = this.appService.allTags.value.find(t => t.nom === value);
+    if (!tag) {
+      tag = new Tag();
+      tag.id = -1;
+      tag.nom = value;
+    }
 
     // Add our ingredient
     if (value) {
