@@ -5,8 +5,12 @@
         <h3 *ngIf="!ci.isDefaultCategory">{{ci.nom}}</h3>
         <ul>
             <li *ngFor="let i of ci.ingredient">
-                <label><input type="checkbox"> {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
-                </label>
+                <mat-checkbox>
+                    {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
+                </mat-checkbox>
+
+                <!-- <label><input type="checkbox"> 
+                </label> -->
             </li>
         </ul>
     </div>

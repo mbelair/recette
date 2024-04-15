@@ -5,11 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Recette } from '../models/recette';
 import { IngredientRecette } from '../models/ingredientRecette';
 import { UniteMesure } from '../models/uniteMesure';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @Component({
   selector: 'app-recette-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatCheckboxModule],
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })

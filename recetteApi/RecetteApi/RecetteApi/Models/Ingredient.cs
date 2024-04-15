@@ -27,6 +27,8 @@ namespace RecetteApi.Models
             };
         }
 
+        public Ingredient() { }
+
         public Ingredient(dynamic dbResult)
         {
             this.Id = dbResult.IngredientId;
