@@ -15,7 +15,14 @@ builder.Services.AddTransient((e) =>
 
     var compiler = new PostgresCompiler();
 
-    return new QueryFactory(connection.OpenConnection(), compiler);
+    var db = new QueryFactory(connection.OpenConnection(), compiler);
+
+    db.Logger = compiled =>
+    {
+        Console.WriteLine(compiled.ToString());
+        System.Diagnostics.Debug.WriteLine(compiled.ToString());
+    };
+    return db;
 });
 
 builder.Services.AddControllers();

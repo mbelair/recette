@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { Recette } from '../models/recette';
+import { IngredientRecette } from '../models/ingredientRecette';
+import { UniteMesure } from '../models/uniteMesure';
 
 @Component({
   selector: 'app-recette-detail',
@@ -10,19 +13,26 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })
-export class RecetteDetailComponent {
+export class RecetteDetailComponent implements OnInit {
 
   id: number = -1;
+  recette: Recette = null;
   constructor(public service: AppService, private route: ActivatedRoute) {
+
+  }
+
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.id = +params['id'];
+      this.service.getRecette(this.id).subscribe({
+        next: (recette: Recette) => {
+          this.recette = recette;
+        }
+      });
     });
   }
 
-  getRecette() {
-    if (this.id >= 0) {
-      return this.service.recettes.value[this.id];
-    }
-    return this.service.recettes.value[0];
+  getUnitLabel(ingredient: IngredientRecette): string {
+    return UniteMesure.fromTypeCode(ingredient.unite).getFormatedLabel(ingredient.quantite > 1);
   }
 }

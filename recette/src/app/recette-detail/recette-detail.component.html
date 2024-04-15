@@ -1,13 +1,22 @@
-<h1>{{getRecette().nom}}</h1>
-<h2>Ingrédients</h2>
-<ul *ngFor="let ci of getRecette().categorieIngredient">
-    <li *ngFor="let i of ci.ingredient">
-        <label><input type="checkbox"> {{i.ingredient.nom}} </label>
-    </li>
-</ul>
-<h2>Préparation</h2>
-<ol *ngFor="let cp of getRecette().categoriePreparation">
-    <li *ngFor="let p of cp.preparation">
-        {{p.text}}
-    </li>
-</ol>
+<ng-container *ngIf="recette != null">
+    <h1>{{recette.nom}}</h1>
+    <h2>Ingrédients</h2>
+    <div *ngFor="let ci of recette.categorieIngredient">
+        <h3 *ngIf="!ci.isDefaultCategory">{{ci.nom}}</h3>
+        <ul>
+            <li *ngFor="let i of ci.ingredient">
+                <label><input type="checkbox"> {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
+                </label>
+            </li>
+        </ul>
+    </div>
+    <h2>Préparation</h2>
+    <div *ngFor="let cp of recette.categoriePreparation">
+        <h3 *ngIf="!cp.isDefaultCategory">{{cp.nom}}</h3>
+        <ol>
+            <li *ngFor="let p of cp.preparation">
+                {{p.text}}
+            </li>
+        </ol>
+    </div>
+</ng-container>

@@ -16,7 +16,7 @@ export class AppService {
 
   allIngredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject(null);
   allTags: BehaviorSubject<Tag[]> = new BehaviorSubject(null);
-  recettes: BehaviorSubject<Recette[]> = new BehaviorSubject([]);
+  private recettes: BehaviorSubject<Recette[]> = new BehaviorSubject(null);
 
   constructor(private readonly http: HttpClient) {
 
@@ -92,7 +92,32 @@ export class AppService {
   }
 
   createRecette(recette: Recette): Observable<void> {
-    return this.http.post<void>(this.url + "/Recette", recette);
+    return this.http.post<void>(this.url + "/Recette", recette).pipe(
+      tap({
+        next: () => {
+          this.recettes.next(null);
+        }
+      })
+    );
+  }
+
+  getAllRecettes(): Observable<Recette[]> {
+    if (!this.recettes.value) {
+      return this.http.get<Recette[]>(this.url + "/Recette").pipe(
+        tap({
+          next: (value) => {
+            this.recettes.next(value);
+          }
+        })
+      );
+    } else {
+      return this.recettes;
+    }
+
+  }
+
+  getRecette(id: number): Observable<Recette> {
+    return this.http.get<Recette>(this.url + "/Recette/" + id);
   }
 
 }

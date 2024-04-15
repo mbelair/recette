@@ -5,6 +5,7 @@ import { AppService } from '../app.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.component';
+import { Recette } from '../models/recette';
 
 @Component({
   selector: 'app-recette',
@@ -15,13 +16,17 @@ import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.comp
 })
 export class RecetteComponent implements OnInit {
 
-
+  recettes: Recette[];
   constructor(public appService: AppService, public dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
-
+    this.appService.getAllRecettes().subscribe({
+      next: (recettes: Recette[]) => {
+        this.recettes = recettes;
+      }
+    })
   }
 
   openFilterDialog() {

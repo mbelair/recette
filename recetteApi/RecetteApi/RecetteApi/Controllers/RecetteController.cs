@@ -14,6 +14,17 @@ public class RecetteController : ControllerBase
     public RecetteController(DatabaseController databaseController) =>
         _databaseController = databaseController;
 
+    [HttpGet]
+    public async Task<IEnumerable<Recette>> Get()
+    {
+        return await this._databaseController.GetAllRecettesAsync();
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<Recette> Get(int id)
+    {
+        return await this._databaseController.GetRecetteAsync(id);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Post(Recette newRecette)
