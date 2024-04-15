@@ -24,6 +24,7 @@
             };
         }
 
+        public CategoriePreparation() { }
         public CategoriePreparation(dynamic dbResult)
         {
             this.Id = dbResult.CategoriePreparationId;

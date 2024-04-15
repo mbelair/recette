@@ -22,6 +22,7 @@
             };
         }
 
+        public Preparation() { }
         public Preparation(dynamic dbResult)
         {
             this.Id = dbResult.PreparationId;

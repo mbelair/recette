@@ -30,6 +30,7 @@
             };
         }
 
+        public IngredientRecette() { }
         public IngredientRecette(dynamic dbResult)
         {
             this.Ingredient_Id = dbResult.IngredientRecetteIngredient_Id;

@@ -22,7 +22,7 @@
                 $"{DB_TableName}.{DB_IsDefaultCategory} as {DB_TableName}{DB_IsDefaultCategory}",
             };
         }
-
+        public CategorieIngredient() { }
         public CategorieIngredient(dynamic dbResult)
         {
             this.Id = dbResult.CategorieIngredientId;
