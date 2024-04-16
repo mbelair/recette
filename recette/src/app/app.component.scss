@@ -1,15 +1,16 @@
 .container {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 60%;
-    width: 100%;
-    padding: 1em 0;
-
-    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-        max-width: 90%;
-    }
+    padding: 20px 50px;
 }
 
 a.active {
     background-color: #e0e0e0;
+}
+
+.mat-mdc-nav-list .mat-mdc-list-item {
+    border-radius: unset;
+}
+
+mat-sidenav {
+    border-right: 1px solid #c4c6d0;
+    border-radius: 0;
 }
