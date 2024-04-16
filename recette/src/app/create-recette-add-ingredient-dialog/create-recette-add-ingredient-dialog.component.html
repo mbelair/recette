@@ -14,23 +14,20 @@
             </button>
         </div>
         <mat-form-field>
-            <mat-label>Quantité</mat-label>
-            <input matInput type="number" [formControl]="quantiteCtrl">
-            @if (quantiteCtrl.hasError('required')) {
-            <mat-error>Quantité est <strong>obligatoire</strong></mat-error>
-            }
-        </mat-form-field>
-        <mat-form-field>
             <mat-label>Unité</mat-label>
             <mat-select [formControl]="uniteCtrl">
-                <mat-optgroup *ngFor="let group of UNITE_GROUP.groups" [label]="group.label">
-                    <mat-option *ngFor="let unite of group.units" [value]="unite.typeCode">{{unite.label}}</mat-option>
-                </mat-optgroup>
                 <mat-option *ngFor="let unite of UNITE_GROUP.units"
                     [value]="unite.typeCode">{{unite.label}}</mat-option>
             </mat-select>
             @if (uniteCtrl.hasError('required')) {
             <mat-error>Unité est <strong>obligatoire</strong></mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field *ngIf="hasQuantite">
+            <mat-label>Quantité</mat-label>
+            <input matInput type="number" [formControl]="quantiteCtrl">
+            @if (quantiteCtrl.hasError('required')) {
+            <mat-error>Quantité est <strong>obligatoire</strong></mat-error>
             }
         </mat-form-field>
         <div class="inputRow">

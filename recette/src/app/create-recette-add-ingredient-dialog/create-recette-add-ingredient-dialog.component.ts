@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +26,7 @@ import { UniteMesure } from '../models/uniteMesure';
   templateUrl: './create-recette-add-ingredient-dialog.component.html',
   styleUrl: './create-recette-add-ingredient-dialog.component.scss'
 })
-export class CreateRecetteAddIngredientDialogComponent {
+export class CreateRecetteAddIngredientDialogComponent implements OnInit {
   protected recette: Recette;
 
   protected categorieIngredient: CategorieIngredient[] = [];
@@ -42,8 +42,8 @@ export class CreateRecetteAddIngredientDialogComponent {
   form = new FormGroup({
     ingredientCtrl: this.ingredientCtrl,
     categoryCtrl: this.categoryCtrl,
-    quantiteCtrl: this.quantiteCtrl,
     uniteCtrl: this.uniteCtrl,
+    quantiteCtrl: this.quantiteCtrl,
     detailCtrl: this.detailCtrl
   })
 
@@ -57,7 +57,6 @@ export class CreateRecetteAddIngredientDialogComponent {
     private appService: AppService
   ) {
     this.recette = data.recette;
-
     if (data.ingredient) {
       const chosenCategory = this.recette.categorieIngredient.find(ci => ci.ingredient.includes(data.ingredient));
       this.ingredientCtrl.setValue(data.ingredient.ingredient);
@@ -88,6 +87,24 @@ export class CreateRecetteAddIngredientDialogComponent {
         this.ingredientCtrl.updateValueAndValidity();
       }
     })
+  }
+
+  get hasQuantite(): boolean {
+    return this.form.contains("quantiteCtrl");
+  }
+
+  ngOnInit(): void {
+    this.form.removeControl("quantiteCtrl");
+    this.uniteCtrl.valueChanges.subscribe({
+      next: (unite) => {
+        if (unite && unite !== UniteMesure.AUCUN.typeCode) {
+          this.form.addControl("quantiteCtrl", this.quantiteCtrl);
+        } else {
+          this.form.removeControl("quantiteCtrl");
+        }
+      }
+    }
+    )
   }
 
   displayFn(i: Ingredient): string {
@@ -127,7 +144,11 @@ export class CreateRecetteAddIngredientDialogComponent {
 
     ingredient.ingredient = typeof this.ingredientCtrl.value === 'string' ? null : (this.ingredientCtrl.value as Ingredient);
     ingredient.detail = this.detailCtrl.value;
-    ingredient.quantite = this.quantiteCtrl.value;
+    if (this.hasQuantite) {
+      ingredient.quantite = this.quantiteCtrl.value;
+    } else {
+      ingredient.quantite = null;
+    }
     ingredient.unite = this.uniteCtrl.value;
     if (!this.editingIngredient) {
       ingredient.id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
