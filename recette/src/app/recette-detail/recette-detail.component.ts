@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recette } from '../models/recette';
 import { IngredientRecette } from '../models/ingredientRecette';
 import { UniteMesure } from '../models/uniteMesure';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
   selector: 'app-recette-detail',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule],
+  imports: [CommonModule, MatCheckboxModule, MatButtonModule],
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })
@@ -19,7 +20,7 @@ export class RecetteDetailComponent implements OnInit {
 
   id: number = -1;
   recette: Recette = null;
-  constructor(public service: AppService, private route: ActivatedRoute) {
+  constructor(public service: AppService, private route: ActivatedRoute, protected router: Router) {
 
   }
 
@@ -36,5 +37,9 @@ export class RecetteDetailComponent implements OnInit {
 
   getUnitLabel(ingredient: IngredientRecette): string {
     return UniteMesure.fromTypeCode(ingredient.unite).getFormatedLabel(ingredient.quantite > 1);
+  }
+
+  editRecette() {
+    this.router.navigate(['edit-recette', this.recette.id]);
   }
 }

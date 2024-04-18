@@ -101,6 +101,16 @@ export class AppService {
     );
   }
 
+  updateRecette(recette: Recette): Observable<void> {
+    return this.http.put<void>(this.url + "/Recette", recette).pipe(
+      tap({
+        next: () => {
+          this.recettes.next(null);
+        }
+      })
+    );
+  }
+
   getAllRecettes(): Observable<Recette[]> {
     if (!this.recettes.value) {
       return this.http.get<Recette[]>(this.url + "/Recette").pipe(

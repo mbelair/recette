@@ -1,4 +1,4 @@
-<h1>Créer une recette</h1>
+<h1>{{this.pageTitle}}</h1>
 <h2>Information</h2>
 <mat-form-field>
     <mat-label>Nom de la recette</mat-label>
@@ -79,6 +79,6 @@
     </ol>
 </div>
 
-<button (click)="createRecette()" mat-flat-button color="primary">
-    Créer
+<button (click)="submit()" mat-flat-button color="primary">
+    {{this.submitButton}}
 </button>

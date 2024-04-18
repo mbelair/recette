@@ -29,10 +29,14 @@ public class RecetteController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(Recette newRecette)
     {
-        newRecette.Date_ouverture = null;
-        newRecette.Date_modification = null;
-        newRecette.Date_creation = DateTime.UtcNow;
         await this._databaseController.CreateRecette(newRecette);
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put(Recette recette)
+    {
+        await this._databaseController.UpdateRecette(recette);
         return Ok();
     }
 

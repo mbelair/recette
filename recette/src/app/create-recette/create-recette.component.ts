@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +19,7 @@ import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
 import { Tag } from '../models/tag';
 import { UniteMesure } from '../models/uniteMesure';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-recette',
@@ -27,8 +28,8 @@ import { UniteMesure } from '../models/uniteMesure';
   templateUrl: './create-recette.component.html',
   styleUrl: './create-recette.component.scss'
 })
-export class CreateRecetteComponent {
-
+export class CreateRecetteComponent implements OnInit {
+  id: number = -1;
   protected recette: Recette = new Recette(true);
 
   filteredTags: Observable<Tag[]>;
@@ -36,7 +37,7 @@ export class CreateRecetteComponent {
   tags: Tag[] = [];
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
-  constructor(public dialog: MatDialog, private appService: AppService) {
+  constructor(public dialog: MatDialog, private appService: AppService, private route: ActivatedRoute) {
     this.filteredTags = this.tagsCtrl.valueChanges.pipe(
       startWith(null),
       debounceTime(300),
@@ -46,6 +47,18 @@ export class CreateRecetteComponent {
         return this.appService.getAllTags(nom)
       }),
     );
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.appService.getRecette(this.id).subscribe({
+        next: (recette: Recette) => {
+          this.recette = recette;
+          this.tags = this.recette.tags;
+        }
+      });
+    });
   }
 
   displayFn(i: Tag): string {
@@ -122,13 +135,21 @@ export class CreateRecetteComponent {
     });
   }
 
-  createRecette() {
+  submit() {
     this.recette.tags = [...new Set(this.tags)];
-    this.appService.createRecette(this.recette).subscribe({
-      next: () => {
-        alert('YAY!');
-      }
-    })
+    if (this.id) {
+      this.appService.updateRecette(this.recette).subscribe({
+        next: () => {
+          alert('YAY!');
+        }
+      });
+    } else {
+      this.appService.createRecette(this.recette).subscribe({
+        next: () => {
+          alert('YAY!');
+        }
+      });
+    }
   }
 
   add(event: MatChipInputEvent): void {
@@ -164,6 +185,22 @@ export class CreateRecetteComponent {
     this.tags.push(event.option.value);
     this.input.nativeElement.value = '';
     this.tagsCtrl.setValue(null);
+  }
+
+  get pageTitle(): string {
+    if (this.id) {
+      return "Modifier une recette";
+    } else {
+      return "Créer une recette";
+    }
+  }
+
+  get submitButton(): string {
+    if (this.id) {
+      return "Modifier";
+    } else {
+      return "Créer";
+    }
   }
 
 }
