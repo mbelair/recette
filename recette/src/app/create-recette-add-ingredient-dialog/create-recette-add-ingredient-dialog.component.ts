@@ -94,7 +94,9 @@ export class CreateRecetteAddIngredientDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form.removeControl("quantiteCtrl");
+    if (!this.uniteCtrl.value) {
+      this.form.removeControl("quantiteCtrl");
+    }
     this.uniteCtrl.valueChanges.subscribe({
       next: (unite) => {
         if (unite && unite !== UniteMesure.AUCUN.typeCode) {
