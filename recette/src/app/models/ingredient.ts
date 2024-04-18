@@ -14,6 +14,7 @@ export function allCategories(): IngredientCategoryEnum[] {
     IngredientCategoryEnum.PRODUIT_LAITIER,
     IngredientCategoryEnum.CONGELE,
     IngredientCategoryEnum.EPICERIE,
+    IngredientCategoryEnum.ALCOOL,
     IngredientCategoryEnum.AUTRE].sort((a, b) => { return getCategoryLabel(a).localeCompare(getCategoryLabel(b)) });
 }
 
@@ -26,6 +27,7 @@ export enum IngredientCategoryEnum {
     PRODUIT_LAITIER = 'PRODUIT_LAITIER',
     CONGELE = 'CONGELE',
     EPICERIE = 'EPICERIE',
+    ALCOOL = 'ALCOOL',
     AUTRE = 'AUTRE',
 }
 
@@ -49,5 +51,7 @@ export function getCategoryLabel(category: IngredientCategoryEnum) {
             return "Épicerie";
         case (IngredientCategoryEnum.AUTRE):
             return "Autre";
+        case (IngredientCategoryEnum.ALCOOL):
+            return "Alcool";
     }
 };
