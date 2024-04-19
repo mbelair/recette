@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace RecetteApi.Models
+namespace RecetteClassLibrary.Models
 {
     public class Ingredient : IDbModel
     {

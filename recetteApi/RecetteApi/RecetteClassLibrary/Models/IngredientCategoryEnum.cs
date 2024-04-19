@@ -1,4 +1,4 @@
-﻿namespace RecetteApi.Models
+﻿namespace RecetteClassLibrary.Models
 {
     public enum IngredientCategoryEnum
     {

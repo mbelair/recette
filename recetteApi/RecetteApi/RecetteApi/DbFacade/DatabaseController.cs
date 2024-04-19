@@ -1,4 +1,4 @@
-﻿using RecetteApi.Models;
+﻿using RecetteClassLibrary.Models;
 using SqlKata.Execution;
 
 namespace RecetteApi.DbFacade
@@ -47,12 +47,12 @@ namespace RecetteApi.DbFacade
 
         public async Task<Recette> GetRecetteAsync(int Id)
         {
-            Task<Recette> recetteTask = db.Query(Recette.DB_TableName)
+            Recette recette = await db.Query(Recette.DB_TableName)
                                           .Where($"{Recette.DB_TableName}.{Recette.DB_Id}", Id)
                                           .FirstAsync<Recette>();
 
             //add categoriePreparation
-            Task<IEnumerable<dynamic>> preparationTask = db.Query(CategoriePreparation.DB_TableName)
+            IEnumerable<dynamic> preparation = await db.Query(CategoriePreparation.DB_TableName)
                                                            .Select(CategoriePreparation.getSelectcolumns())
                                                            .Select(Preparation.getSelectcolumns())
                                                            .LeftJoin(Preparation.DB_TableName, $"{Preparation.DB_TableName}.{Preparation.DB_CategoriePreparation_Id}", $"{CategoriePreparation.DB_TableName}.{CategoriePreparation.DB_Id}")
@@ -61,7 +61,7 @@ namespace RecetteApi.DbFacade
 
 
             //add categorieIngredients
-            Task<IEnumerable<dynamic>> ingredientTask = db.Query(CategorieIngredient.DB_TableName)
+            IEnumerable<dynamic> ingredient = await db.Query(CategorieIngredient.DB_TableName)
                                                         .Select(CategorieIngredient.getSelectcolumns())
                                                         .Select(IngredientRecette.getSelectcolumns())
                                                         .Select(Ingredient.getSelectcolumns())
@@ -70,19 +70,16 @@ namespace RecetteApi.DbFacade
                                                         .Where($"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Recette_Id}", Id)
                                                         .GetAsync();
 
-            Task<IEnumerable<dynamic>> tagsTask = db.Query(Tag.DB_TableName)
+            IEnumerable<dynamic> tags = await db.Query(Tag.DB_TableName)
                                                        .Select(Tag.getSelectcolumns())
                                                        .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
                                                        .Where($"TagRecette.Recette_Id", Id)
                                                        .GetAsync();
 
-            await Task.WhenAll(recetteTask, preparationTask, ingredientTask, tagsTask);
 
-            Recette recette = await recetteTask;
-
-            recette.CategoriePreparation = CategoriePreparation.fromDynamic(await preparationTask);
-            recette.CategorieIngredient = CategorieIngredient.fromDynamic(await ingredientTask);
-            recette.Tags = Tag.fromDynamic(await tagsTask);
+            recette.CategoriePreparation = CategoriePreparation.fromDynamic(preparation);
+            recette.CategorieIngredient = CategorieIngredient.fromDynamic(ingredient);
+            recette.Tags = Tag.fromDynamic(tags);
 
             return recette;
         }

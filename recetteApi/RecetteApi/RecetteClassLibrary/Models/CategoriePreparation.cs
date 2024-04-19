@@ -1,4 +1,4 @@
-﻿namespace RecetteApi.Models
+﻿namespace RecetteClassLibrary.Models
 {
     public class CategoriePreparation : BaseCategorie
     {

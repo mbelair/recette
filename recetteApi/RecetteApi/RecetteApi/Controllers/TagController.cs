@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RecetteApi.DbFacade;
-using RecetteApi.Models;
+using RecetteClassLibrary.Models;
 
 namespace RecetteApi.Controllers
 {

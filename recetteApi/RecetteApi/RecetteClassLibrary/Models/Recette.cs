@@ -1,4 +1,4 @@
-﻿namespace RecetteApi.Models
+﻿namespace RecetteClassLibrary.Models
 {
     public class Recette : IDbModel
     {
@@ -15,7 +15,7 @@
 
 
         public int Id { get; set; }
-        public string Nom { get; set; }
+        public string? Nom { get; set; }
         public int TempsPreparation { get; set; }
         public int TempsCuisson { get; set; }
         public DateTime Date_creation { get; set; }

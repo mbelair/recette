@@ -1,3 +1,7 @@
 recetteApi/RecetteApi/.vs/*
 recetteApi/RecetteApi/RecetteApi/bin/*
 recetteApi/RecetteApi/RecetteApi/obj/*
+recetteApi/RecetteApi/RecetteExtractor/bin/*
+recetteApi/RecetteApi/RecetteExtractor/obj/*
+recetteApi/RecetteApi/RecetteClassLibrary/obj/*
+recetteApi/RecetteApi/RecetteClassLibrary/bin/*
