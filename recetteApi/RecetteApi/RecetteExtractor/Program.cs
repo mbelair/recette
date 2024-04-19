@@ -17,8 +17,11 @@ class Program
             {
                 IEnumerable<Recette> recettes = await GetAllRecettesAsync(db);
 
-                string json = JsonSerializer.Serialize(recettes);
-                File.WriteAllText("C:\\dev\\recette\\recettes.json", json);
+                string json = JsonSerializer.Serialize(recettes, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+                File.WriteAllText("C:\\dev\\recette\\recette\\src\\assets\\recettes.json", json);
 
             }
         }

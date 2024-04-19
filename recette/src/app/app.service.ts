@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, find, map, of, tap } from 'rxjs';
 import { Ingredient, IngredientCategoryEnum } from './models/ingredient';
 import { Recette } from './models/recette';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { Tag } from './models/tag';
+import { environment } from '../environments/environment';
 
 
 
@@ -20,6 +21,10 @@ export class AppService {
 
   constructor(private readonly http: HttpClient) {
 
+  }
+
+  isDev(): boolean {
+    return !environment.production;
   }
 
   getAllIngredients(search: string): Observable<Ingredient[]> {
@@ -113,7 +118,13 @@ export class AppService {
 
   getAllRecettes(): Observable<Recette[]> {
     if (!this.recettes.value) {
-      return this.http.get<Recette[]>(this.url + "/Recette").pipe(
+      let url = null;
+      if (this.isDev()) {
+        url = this.url + "/Recette";
+      } else {
+        url = 'assets/recettes.json';
+      }
+      return this.http.get<Recette[]>(url).pipe(
         tap({
           next: (value) => {
             this.recettes.next(value);
@@ -127,7 +138,11 @@ export class AppService {
   }
 
   getRecette(id: number): Observable<Recette> {
-    return this.http.get<Recette>(this.url + "/Recette/" + id);
+    if (this.isDev()) {
+      return this.http.get<Recette>(this.url + "/Recette/" + id);
+    } else {
+      return this.getAllRecettes().pipe(map(recettes => recettes.find(recette => recette.id == id)));
+    }
   }
 
 }

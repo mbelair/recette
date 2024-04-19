@@ -42,7 +42,16 @@ namespace RecetteApi.DbFacade
         #region Recette
         public async Task<IEnumerable<Recette>> GetAllRecettesAsync()
         {
-            return await db.Query("Recette").GetAsync<Recette>();
+            IEnumerable<Recette> recettes = await db.Query("Recette").GetAsync<Recette>();
+            foreach (Recette recette in recettes)
+            {
+                recette.Tags = Tag.fromDynamic(await db.Query(Tag.DB_TableName)
+                                                      .Select(Tag.getSelectcolumns())
+                                                      .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
+                                                      .Where($"TagRecette.Recette_Id", recette.Id)
+                                                      .GetAsync());
+            }
+            return recettes;
         }
 
         public async Task<Recette> GetRecetteAsync(int Id)
