@@ -25,23 +25,6 @@ mat-sidenav-container {
 
 @include mat.core();
 
-// $my-primary: mat.define-palette(mat.$indigo-palette);
-// $my-accent: mat.define-palette(mat.$light-blue-palette);
-// $my-warn: mat.define-palette(mat.$red-palette);
-
-// $my-theme: mat.define-light-theme((color: (primary: $my-primary,
-//                 accent: $my-accent,
-//                 warn: $my-warn,
-//             ),
-//             typography: mat.define-typography-config(),
-//             density: 0,
-//         ));
-
-// @include mat.core-theme($my-theme);
-// @include mat.all-component-themes($my-theme);
-
-
-
 
 $theme: matx.define-theme((color: (theme-type: light,
                 primary: matx.$m3-azure-palette,
@@ -52,6 +35,22 @@ $theme: matx.define-theme((color: (theme-type: light,
 
 html {
     @include mat.all-component-themes($theme);
+
+    .mat-typography {
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        --mdc-form-field-label-text-size: 1rem;
+    }
 }
 
 @include matx.color-variants-back-compat($theme);
