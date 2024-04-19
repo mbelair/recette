@@ -7,6 +7,7 @@ import { IngredientRecette } from '../models/ingredientRecette';
 import { UniteMesure } from '../models/uniteMesure';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -41,5 +42,9 @@ export class RecetteDetailComponent implements OnInit {
 
   editRecette() {
     this.router.navigate(['edit-recette', this.recette.id]);
+  }
+
+  isDev(): boolean {
+    return !environment.production;
   }
 }

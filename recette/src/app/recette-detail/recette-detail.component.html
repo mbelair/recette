@@ -1,6 +1,6 @@
 <div *ngIf="recette != null" class="recette-detail">
     <h1>{{recette.nom}}</h1>
-    <button mat-stroked-button (click)="editRecette()">Modifier</button>
+    <button *ngIf="isDev()" mat-stroked-button (click)="editRecette()">Modifier</button>
     <h2>Ingrédients</h2>
     <div *ngFor="let ci of recette.categorieIngredient">
         <h3 *ngIf="!ci.isDefaultCategory">{{ci.nom}}</h3>

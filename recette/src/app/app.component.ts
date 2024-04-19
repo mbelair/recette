@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { Observable, filter, map, withLatestFrom } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { environment } from '../environments/environment';
 
 
 @Component({
@@ -32,5 +33,9 @@ export class AppComponent implements AfterViewInit {
       withLatestFrom(this.isHandset$),
       filter(([a, b]) => b && a instanceof NavigationEnd)
     ).subscribe(_ => this.drawer.close());
+  }
+
+  isDev(): boolean {
+    return !environment.production;
   }
 }
