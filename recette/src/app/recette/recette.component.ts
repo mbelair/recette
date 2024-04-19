@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.component';
 import { Recette } from '../models/recette';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-recette',
@@ -33,5 +34,9 @@ export class RecetteComponent implements OnInit {
     this.dialog.open(RecetteFiltresComponent, {
       minWidth: "50%"
     });
+  }
+
+  isDev(): boolean {
+    return !environment.production;
   }
 }
