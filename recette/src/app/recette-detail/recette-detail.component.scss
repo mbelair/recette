@@ -10,10 +10,7 @@
     .mat-mdc-checkbox-checked {
         ::ng-deep label {
             color: rgb(136, 136, 136);
+            text-decoration: line-through;
         }
-    }
-
-    mat-checkbox {
-        margin-bottom: 10px;
     }
 }

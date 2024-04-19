@@ -50,6 +50,14 @@ html {
         }
 
         --mdc-form-field-label-text-size: 1rem;
+
+        .mdc-form-field {
+            align-items: start;
+
+            >label {
+                padding-top: calc((var(--mdc-checkbox-state-layer-size) - 18px) / 2)
+            }
+        }
     }
 }
 
