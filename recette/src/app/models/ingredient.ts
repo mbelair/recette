@@ -42,7 +42,7 @@ export function getCategoryLabel(category: IngredientCategoryEnum) {
         case (IngredientCategoryEnum.POISSONNERIE):
             return "Poissonnerie";
         case (IngredientCategoryEnum.CHARCUTTERIE):
-            return "Charcutterie et fromage";
+            return "Charcuterie et fromage";
         case (IngredientCategoryEnum.PRODUIT_LAITIER):
             return "Produit laitier";
         case (IngredientCategoryEnum.CONGELE):

@@ -19,6 +19,19 @@ namespace RecetteApi.DbFacade
             return await db.Query("Ingredient").Select("Id", "Nom", "Category").GetAsync<Ingredient>();
         }
 
+        public async Task<IEnumerable<IngredientList>> GetAllIngredientsWithRecetteCountAsync()
+        {
+            IEnumerable<dynamic> ingredient = await db.Query("Ingredient").Select(Ingredient.GetSelectcolumns())
+                .SelectRaw($"count(distinct \"{Recette.DB_TableName}\".\"{Recette.DB_Id}\") as \"recetteCount\"")
+                .LeftJoin(IngredientRecette.DB_TableName, $"{Ingredient.DB_TableName}.{Ingredient.DB_Id}", $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_Ingredient_Id}")
+                .LeftJoin(CategorieIngredient.DB_TableName, $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_CategorieIngredient_Id}", $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Id}")
+                .LeftJoin(Recette.DB_TableName, $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Recette_Id}", $"{Recette.DB_TableName}.{Recette.DB_Id}")
+                .GroupBy($"{Ingredient.DB_TableName}.{Ingredient.DB_Id}")
+                .GetAsync();
+
+            return ingredient.Select(x => new IngredientList(x));
+        }
+
         public async Task<Ingredient> GetIngredientByIdAsync(int Id)
         {
             return await db.Query("Ingredient").Select("Id", "Nom", "Category").Where("Id", Id).FirstOrDefaultAsync<Ingredient>();
@@ -29,9 +42,9 @@ namespace RecetteApi.DbFacade
             await db.Query("Ingredient").InsertAsync(newIngredient.toDbModel());
         }
 
-        public async Task UpdateIngredient(int id, Ingredient updatedIngredient)
+        public async Task UpdateIngredient(Ingredient updatedIngredient)
         {
-            await db.Query("Ingredient").Where("Id", id).UpdateAsync(updatedIngredient.toDbModel());
+            await db.Query("Ingredient").Where("Id", updatedIngredient.Id).UpdateAsync(updatedIngredient.toDbModel());
         }
 
         public async Task DeleteIngredient(int id)
@@ -73,7 +86,7 @@ namespace RecetteApi.DbFacade
             IEnumerable<dynamic> ingredient = await db.Query(CategorieIngredient.DB_TableName)
                                                         .Select(CategorieIngredient.getSelectcolumns())
                                                         .Select(IngredientRecette.getSelectcolumns())
-                                                        .Select(Ingredient.getSelectcolumns())
+                                                        .Select(Ingredient.GetSelectcolumns())
                                                         .LeftJoin(IngredientRecette.DB_TableName, $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_CategorieIngredient_Id}", $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Id}")
                                                         .LeftJoin(Ingredient.DB_TableName, $"{Ingredient.DB_TableName}.{Ingredient.DB_Id}", $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_Ingredient_Id}")
                                                         .Where($"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Recette_Id}", Id)

@@ -31,12 +31,10 @@ namespace RecetteClassLibrary.Models
 
         public Ingredient(dynamic dbResult)
         {
-            this.Id = dbResult.IngredientId;
-            this.Nom = dbResult.IngredientNom;
-            this.Category = Enum.Parse(typeof(IngredientCategoryEnum), dbResult.IngredientCategory);
+            this.FromDynamic(dbResult);
         }
 
-        public static List<string> getSelectcolumns()
+        public static List<string> GetSelectcolumns()
         {
             return new List<string>
             {
@@ -44,6 +42,13 @@ namespace RecetteClassLibrary.Models
                 $"{DB_TableName}.{DB_Nom} as {DB_TableName}{DB_Nom}",
                 $"{DB_TableName}.{DB_Category} as {DB_TableName}{DB_Category}",
             };
+        }
+
+        protected void FromDynamic(dynamic dbResult)
+        {
+            this.Id = dbResult.IngredientId;
+            this.Nom = dbResult.IngredientNom;
+            this.Category = Enum.Parse(typeof(IngredientCategoryEnum), dbResult.IngredientCategory);
         }
     }
 }

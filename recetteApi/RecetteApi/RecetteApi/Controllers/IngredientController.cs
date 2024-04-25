@@ -38,10 +38,10 @@ namespace RecetteApi.Controllers
             return Ok();
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, Ingredient updatedIngredient)
+        [HttpPut]
+        public async Task<IActionResult> Update(Ingredient updatedIngredient)
         {
-            await this._databaseController.UpdateIngredient(id, updatedIngredient);
+            await this._databaseController.UpdateIngredient(updatedIngredient);
             return Ok();
         }
 
@@ -50,6 +50,13 @@ namespace RecetteApi.Controllers
         {
             await this._databaseController.DeleteIngredient(id);
             return Ok();
+        }
+
+        [Route("list")]
+        [HttpGet]
+        public async Task<IEnumerable<IngredientList>> GetWithRecetteCount()
+        {
+            return await this._databaseController.GetAllIngredientsWithRecetteCountAsync();
         }
     }
 }

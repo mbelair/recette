@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { Tag } from './models/tag';
 import { environment } from '../environments/environment';
+import { IngredientList } from './models/IngredientList';
 
 
 
@@ -42,6 +43,10 @@ export class AppService {
     } else {
       return of(this.filterIngredients(search, this.allIngredients.value));
     }
+  }
+
+  getAllIngredientsWithRecetteCount(): Observable<IngredientList[]> {
+    return this.http.get<IngredientList[]>(this.url + "/Ingredient/list");
   }
 
   getAllTags(search: string): Observable<Tag[]> {

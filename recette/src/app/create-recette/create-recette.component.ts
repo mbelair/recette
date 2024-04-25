@@ -52,12 +52,14 @@ export class CreateRecetteComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.appService.getRecette(this.id).subscribe({
-        next: (recette: Recette) => {
-          this.recette = recette;
-          this.tags = this.recette.tags;
-        }
-      });
+      if (this.id) {
+        this.appService.getRecette(this.id).subscribe({
+          next: (recette: Recette) => {
+            this.recette = recette;
+            this.tags = this.recette.tags;
+          }
+        });
+      }
     });
   }
 
