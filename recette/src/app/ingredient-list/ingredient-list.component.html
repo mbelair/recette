@@ -27,11 +27,11 @@
     <ng-container matColumnDef="actions">
         <th mat-header-cell mat-sort-header *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
-            <button (click)="openEditIngredientDialog(element)" mat-icon-button color="primary">
+            <button (click)="openEditIngredientDialog(element, $event)" mat-icon-button color="primary">
                 <mat-icon fontIcon="edit"></mat-icon>
             </button>
-            <button *ngIf="element.recetteCount === 0" (click)="openDeleteIngredientDialog(element)" mat-icon-button
-                color="primary">
+            <button *ngIf="element.recetteCount === 0" (click)="openDeleteIngredientDialog(element,$event)"
+                mat-icon-button color="primary">
                 <mat-icon fontIcon="delete"></mat-icon>
             </button>
         </td>

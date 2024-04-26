@@ -20,17 +20,6 @@ namespace RecetteApi.Controllers
             return await this._databaseController.GetAllIngredientsAsync();
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Ingredient>> Get(int id)
-        {
-            var ingredient = await this._databaseController.GetIngredientByIdAsync(id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
-            return ingredient;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post(Ingredient newIngredient)
         {
@@ -57,6 +46,12 @@ namespace RecetteApi.Controllers
         public async Task<IEnumerable<IngredientList>> GetWithRecetteCount()
         {
             return await this._databaseController.GetAllIngredientsWithRecetteCountAsync();
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IngredientDetail> GetByIdWithRecetteCount(int id)
+        {
+            return await this._databaseController.GetIngredientByIdWithRecettes(id);
         }
     }
 }

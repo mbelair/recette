@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, filter, find, map, of, tap } from 'rxjs';
-import { Ingredient, IngredientCategoryEnum } from './models/ingredient';
-import { Recette } from './models/recette';
 import { HttpClient } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http';
-import { Tag } from './models/tag';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { IngredientList } from './models/IngredientList';
+import { Ingredient } from './models/ingredient';
+import { Recette } from './models/recette';
+import { Tag } from './models/tag';
+import { IngredientDetail } from './models/ingredientDetail';
 
 
 
@@ -47,6 +47,10 @@ export class AppService {
 
   getAllIngredientsWithRecetteCount(): Observable<IngredientList[]> {
     return this.http.get<IngredientList[]>(this.url + "/Ingredient/list");
+  }
+
+  getIngredientDetail(id: number): Observable<IngredientDetail> {
+    return this.http.get<IngredientDetail>(this.url + "/Ingredient/" + id);
   }
 
   deleteIngredient(ingredient: Ingredient): Observable<void> {

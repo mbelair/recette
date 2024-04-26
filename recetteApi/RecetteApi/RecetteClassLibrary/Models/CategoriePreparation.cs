@@ -46,7 +46,10 @@
                     toReturn.Add(new CategoriePreparation(result));
                 }
                 CategoriePreparation ci = toReturn.Find(x => x.Id == id)!;
-                ci.Preparation.Add(new Preparation(result));
+                if (result.PreparationId != null)
+                {
+                    ci.Preparation.Add(new Preparation(result));
+                }
             }
             return toReturn;
         }

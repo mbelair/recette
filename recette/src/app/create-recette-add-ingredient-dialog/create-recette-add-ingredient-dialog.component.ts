@@ -65,6 +65,9 @@ export class CreateRecetteAddIngredientDialogComponent implements OnInit {
       this.uniteCtrl.setValue(data.ingredient.unite);
       this.detailCtrl.setValue(data.ingredient.detail);
       this.editingIngredient = data.ingredient;
+    } else {
+      const chosenCategory = this.recette.categorieIngredient.find(ci => ci.isDefaultCategory);
+      this.categoryCtrl.setValue(chosenCategory.id);
     }
 
 
@@ -142,7 +145,7 @@ export class CreateRecetteAddIngredientDialogComponent implements OnInit {
     })
 
     const chosenCategory = this.recette.categorieIngredient.find(ci => ci.id === this.categoryCtrl.getRawValue());
-    const previousCategory = this.recette.categorieIngredient.find(cp => cp.ingredient.find(p => p.id === ingredient.id));
+    const previousCategory = this.recette.categorieIngredient.find(cp => cp.ingredient.find((p: IngredientRecette) => p.ingredient_Id === ingredient.ingredient_Id));
 
     ingredient.ingredient = typeof this.ingredientCtrl.value === 'string' ? null : (this.ingredientCtrl.value as Ingredient);
     ingredient.detail = this.detailCtrl.value;
@@ -153,9 +156,9 @@ export class CreateRecetteAddIngredientDialogComponent implements OnInit {
     }
     ingredient.unite = this.uniteCtrl.value;
     if (!this.editingIngredient) {
-      ingredient.id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
+      ingredient.ingredient_Id = 1 + this.recette.categorieIngredient.reduce((accumulator, currentValue) => {
         return Math.max(accumulator, currentValue.ingredient.reduce((accumulator2, currentValue2) => {
-          return Math.max(accumulator2, currentValue2.id);
+          return Math.max(accumulator2, currentValue2.ingredient_Id);
         }, -1));
       }, -1);
     }

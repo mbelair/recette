@@ -1,7 +1,7 @@
 import { Ingredient } from "./ingredient";
 
 export class IngredientRecette {
-    id: number;
+    ingredient_Id: number;
     ingredient: Ingredient;
     quantite: number;
     unite: string;

@@ -32,6 +32,30 @@ namespace RecetteApi.DbFacade
             return ingredient.Select(x => new IngredientList(x));
         }
 
+        public async Task<IngredientDetail> GetIngredientByIdWithRecettes(int id)
+        {
+            IngredientDetail ingredient = await db.Query(Ingredient.DB_TableName)
+                .Where($"{Ingredient.DB_TableName}.{Ingredient.DB_Id}", id)
+                .FirstOrDefaultAsync<IngredientDetail>();
+
+            IEnumerable<Recette> recettes = Recette.fromDynamic(await db.Query(Recette.DB_TableName)
+                .Select(Recette.getSelectcolumns())
+                .LeftJoin(CategorieIngredient.DB_TableName, $"{Recette.DB_TableName}.{Recette.DB_Id}", $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Recette_Id}")
+                .LeftJoin(IngredientRecette.DB_TableName, $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Id}", $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_CategorieIngredient_Id}")
+                .Where($"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_Ingredient_Id}", id)
+                .GetAsync());
+            ingredient.Recettes = recettes;
+            foreach (Recette recette in recettes)
+            {
+                recette.Tags = Tag.fromDynamic(await db.Query(Tag.DB_TableName)
+                                                      .Select(Tag.getSelectcolumns())
+                                                      .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
+                                                      .Where($"TagRecette.Recette_Id", recette.Id)
+                                                      .GetAsync());
+            }
+            return ingredient;
+        }
+
         public async Task<Ingredient> GetIngredientByIdAsync(int Id)
         {
             return await db.Query("Ingredient").Select("Id", "Nom", "Category").Where("Id", Id).FirstOrDefaultAsync<Ingredient>();

@@ -7,6 +7,7 @@ export const routes: Routes = [
     { path: 'create-recette', loadComponent: () => import('./create-recette/create-recette.component').then(mod => mod.CreateRecetteComponent) },
     { path: 'edit-recette/:id', loadComponent: () => import('./create-recette/create-recette.component').then(mod => mod.CreateRecetteComponent) },
     { path: 'ingredients', loadComponent: () => import('./ingredient-list/ingredient-list.component').then(mod => mod.IngredientListComponent) },
+    { path: 'ingredients/:id', loadComponent: () => import('./ingredient-detail/ingredient-detail.component').then(mod => mod.IngredientDetailComponent) },
 
 ];
 

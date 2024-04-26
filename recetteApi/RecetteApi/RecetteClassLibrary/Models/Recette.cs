@@ -26,7 +26,34 @@
         public List<CategoriePreparation> CategoriePreparation { get; set; } = new List<CategoriePreparation>();
         public List<CategorieIngredient> CategorieIngredient { get; set; } = new List<CategorieIngredient>();
 
+        public Recette() { }
+        public Recette(dynamic dbResult)
+        {
+            this.Id = dbResult.RecetteId;
+            this.Nom = dbResult.RecetteNom;
+            this.TempsPreparation = dbResult.RecetteTempsPreparation;
+            this.TempsCuisson = dbResult.RecetteTempsCuisson;
+            this.Date_creation = dbResult.RecetteDate_creation;
+            this.Date_ouverture = dbResult.RecetteDate_ouverture;
+            this.NombrePortion = dbResult.RecetteNombrePortion;
+            this.Date_modification = dbResult.RecetteDate_modification;
+        }
 
+        public static IEnumerable<Recette> fromDynamic(dynamic dbResult)
+        {
+            List<Recette> toReturn = [];
+            HashSet<int> ids = new HashSet<int>();
+            foreach (dynamic result in dbResult)
+            {
+                int id = result.RecetteId;
+                if (!ids.Contains(id))
+                {
+                    ids.Add(id);
+                    toReturn.Add(new Recette(result));
+                }
+            }
+            return toReturn;
+        }
         public object toDbModel()
         {
             return new

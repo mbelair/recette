@@ -7,11 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { AppService } from '../app.service';
+import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
 import { IngredientList } from '../models/IngredientList';
 import { Ingredient, getCategoryLabel } from '../models/ingredient';
-import { CreateIngredientComponent } from '../create-ingredient/create-ingredient.component';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['nom', 'category', 'recetteCount', 'actions'];
   getCategoryLabel = getCategoryLabel;
 
-  constructor(protected service: AppService, public dialog: MatDialog) {
+  constructor(protected service: AppService, public dialog: MatDialog, protected router: Router) {
 
   }
 
@@ -55,7 +56,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit {
   }
 
   handleRowClicked(row: Ingredient) {
-
+    this.router.navigate(['ingredients', row.id]);
   }
 
   applyFilter(event: Event) {
@@ -63,7 +64,8 @@ export class IngredientListComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openEditIngredientDialog(element: Ingredient) {
+  openEditIngredientDialog(element: Ingredient, event: Event) {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(CreateIngredientComponent, {
       data: {
         ingredient: element
@@ -77,7 +79,8 @@ export class IngredientListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openDeleteIngredientDialog(element: Ingredient) {
+  openDeleteIngredientDialog(element: Ingredient, event: Event) {
+    event.stopPropagation();
 
     const dialogRef = this.dialog.open(GenericDeleteDialogComponent, {
       data: {
