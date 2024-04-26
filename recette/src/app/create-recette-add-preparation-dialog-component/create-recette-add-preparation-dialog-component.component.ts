@@ -48,6 +48,9 @@ export class CreateRecetteAddPreparationDialogComponentComponent {
       this.categoryCtrl.setValue(chosenCategory.id);
       this.detailCtrl.setValue(data.step.text);
       this.editingStep = data.step;
+    } else {
+      const chosenCategory = this.recette.categoriePreparation.find(ci => ci.isDefaultCategory);
+      this.categoryCtrl.setValue(chosenCategory.id);
     }
 
 
