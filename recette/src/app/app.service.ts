@@ -49,6 +49,10 @@ export class AppService {
     return this.http.get<IngredientList[]>(this.url + "/Ingredient/list");
   }
 
+  deleteIngredient(ingredient: Ingredient): Observable<void> {
+    return this.http.delete<void>(this.url + "/Ingredient/" + ingredient.id);
+  }
+
   getAllTags(search: string): Observable<Tag[]> {
     if (!this.allTags.value) {
       return this.http.get<Tag[]>(this.url + "/Tag").pipe(
@@ -93,6 +97,16 @@ export class AppService {
 
   createIngredient(ingredient: Ingredient): Observable<void> {
     return this.http.post<void>(this.url + "/Ingredient", ingredient).pipe(
+      tap({
+        next: () => {
+          this.allIngredients.next(null);
+        }
+      })
+    );
+  }
+
+  updateIngredient(ingredient: Ingredient): Observable<void> {
+    return this.http.put<void>(this.url + "/Ingredient", ingredient).pipe(
       tap({
         next: () => {
           this.allIngredients.next(null);
