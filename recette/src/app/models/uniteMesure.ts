@@ -3,9 +3,10 @@ export class UniteMesure {
     static readonly G = new UniteMesure('05', 'g');
     static readonly UNITE = new UniteMesure('07', 'unité');
     static readonly AUCUN = new UniteMesure('08', 'aucun');
+    static readonly PINCEE = new UniteMesure('09', 'pincée');
 
     static readonly UNITE_GROUP = {
-        units: [UniteMesure.ML, UniteMesure.G, UniteMesure.UNITE, UniteMesure.AUCUN]
+        units: [UniteMesure.ML, UniteMesure.G, UniteMesure.PINCEE, UniteMesure.UNITE, UniteMesure.AUCUN]
     };
 
     typeCode: string;
