@@ -9,6 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { AppService } from '../app.service';
 import { CreateRecetteAddIngredientDialogComponent } from '../create-recette-add-ingredient-dialog/create-recette-add-ingredient-dialog.component';
@@ -18,17 +20,18 @@ import { IngredientRecette } from '../models/ingredientRecette';
 import { Preparation } from '../models/preparation';
 import { Recette } from '../models/recette';
 import { Tag } from '../models/tag';
+import { TypeRepas } from '../models/typeRepas';
 import { UniteMesure } from '../models/uniteMesure';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-recette',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatChipsModule, MatListModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
+  imports: [CommonModule, MatFormFieldModule, MatChipsModule, MatSelectModule, MatListModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatDialogModule, CreateRecetteAddIngredientDialogComponent],
   templateUrl: './create-recette.component.html',
   styleUrl: './create-recette.component.scss'
 })
 export class CreateRecetteComponent implements OnInit {
+  allMealTypes = TypeRepas.ALL;
   id: number = -1;
   protected recette: Recette = new Recette(true);
 

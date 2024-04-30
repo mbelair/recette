@@ -36,6 +36,14 @@
         }
     </mat-autocomplete>
 </mat-form-field>
+<mat-form-field>
+    <mat-label>Type de repas</mat-label>
+    <mat-select [(ngModel)]="recette.typeRepas">
+        @for (mt of allMealTypes; track mt) {
+        <mat-option [value]="mt.typeCode">{{mt.label}}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
 <h2>Ingrédients</h2>
 <div class="ingredientHeader">
     <button (click)="openAddIngredientDialog()" mat-stroked-button color="primary">

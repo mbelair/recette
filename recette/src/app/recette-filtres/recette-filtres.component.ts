@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, Type } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -10,6 +10,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
+import { TypeRepas } from '../models/typeRepas';
 
 @Component({
   selector: 'app-recette-filtres',
@@ -18,17 +19,11 @@ import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autoco
   templateUrl: './recette-filtres.component.html',
   styleUrl: './recette-filtres.component.scss'
 })
-export class RecetteFiltresComponent {
+export class RecetteFiltresComponent implements OnInit {
 
-  mealType = this._formBuilder.group({
-    accompagnement: false,
-    collation: false,
-    dejeuner: false,
-    dessert: false,
-    entree: false,
-    diner: false,
-    platPrincipal: false,
-  });
+  allMealTypes = TypeRepas.ALL;
+
+  mealType = this._formBuilder.group({});
 
   totalTime = this._formBuilder.group({
     less30: false,
@@ -36,8 +31,18 @@ export class RecetteFiltresComponent {
     more60: false,
   });
 
+  myForm = this._formBuilder.group({
+    mealType: this.mealType,
+    totalTime: this.totalTime
+  });
+
   constructor(private _formBuilder: FormBuilder) {
 
+  }
+  ngOnInit(): void {
+    this.allMealTypes.forEach(mt => {
+      this.mealType.addControl(mt.typeCode, new FormControl());
+    });
   }
 
 

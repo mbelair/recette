@@ -201,7 +201,8 @@ namespace RecetteApi.DbFacade
                           recette.TempsPreparation,
                           recette.TempsCuisson,
                           Date_modification = DateTime.UtcNow,
-                          recette.NombrePortion
+                          recette.NombrePortion,
+                          recette.TypeRepas
                       });
 
                 foreach (CategoriePreparation categoriePreparation in recette.CategoriePreparation)

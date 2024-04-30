@@ -12,6 +12,7 @@
         public const string DB_NombrePortion = "NombrePortion";
         public const string DB_Date_modification = "Date_modification";
         public const string DB_Nom = "Nom";
+        public const string DB_Type_Repas = "TypeRepas";
 
 
         public int Id { get; set; }
@@ -25,6 +26,7 @@
         public List<Tag> Tags { get; set; } = new List<Tag>();
         public List<CategoriePreparation> CategoriePreparation { get; set; } = new List<CategoriePreparation>();
         public List<CategorieIngredient> CategorieIngredient { get; set; } = new List<CategorieIngredient>();
+        public string? TypeRepas { get; set; }
 
         public Recette() { }
         public Recette(dynamic dbResult)
@@ -37,6 +39,7 @@
             this.Date_ouverture = dbResult.RecetteDate_ouverture;
             this.NombrePortion = dbResult.RecetteNombrePortion;
             this.Date_modification = dbResult.RecetteDate_modification;
+            this.TypeRepas = dbResult.RecetteTypeRepas;
         }
 
         public static IEnumerable<Recette> fromDynamic(dynamic dbResult)
@@ -64,7 +67,8 @@
                 this.Date_creation,
                 this.Date_ouverture,
                 this.Date_modification,
-                this.NombrePortion
+                this.NombrePortion,
+                this.TypeRepas
             };
         }
 
@@ -80,6 +84,7 @@
                 $"{DB_TableName}.{DB_Date_ouverture} as {DB_TableName}{DB_Date_ouverture}",
                 $"{DB_TableName}.{DB_NombrePortion} as {DB_TableName}{DB_NombrePortion}",
                 $"{DB_TableName}.{DB_Date_modification} as {DB_TableName}{DB_Date_modification}",
+                $"{DB_TableName}.{DB_Type_Repas} as {DB_TableName}{DB_Type_Repas}",
             };
         }
     }

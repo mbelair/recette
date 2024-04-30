@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Filtres</h2>
-<form>
+<form [formGroup]="myForm">
     <mat-dialog-content>
         <mat-accordion multi="true">
             <mat-expansion-panel hideToggle>
@@ -25,13 +25,9 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <section [formGroup]="mealType">
-                    <p><mat-checkbox formControlName="accompagnement">Accompagnement</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="collation">Collation</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="dejeuner">Déjeuner & brunch</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="dessert">Dessert</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="entree">Entrée</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="diner">Dîner</mat-checkbox></p>
-                    <p><mat-checkbox formControlName="platPrincipal">Plat principal</mat-checkbox></p>
+                    <p *ngFor="let mt of allMealTypes">
+                        <mat-checkbox [formControlName]="mt.typeCode">{{mt.label}}</mat-checkbox>
+                    </p>
                 </section>
             </mat-expansion-panel>
             <mat-expansion-panel hideToggle>
