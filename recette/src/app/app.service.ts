@@ -21,7 +21,7 @@ export class AppService {
   allTags: BehaviorSubject<Tag[]> = new BehaviorSubject(null);
   private recettes: BehaviorSubject<Recette[]> = new BehaviorSubject(null);
 
-  filters: BehaviorSubject<Filters> = new BehaviorSubject(new Filters());
+  filters: BehaviorSubject<Filters> = new BehaviorSubject(null);
 
   constructor(private readonly http: HttpClient) {
 

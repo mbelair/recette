@@ -41,8 +41,8 @@ export class RecetteComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.appService.filters.subscribe({
       next: (filters) => {
+        this.filteredRecettes = this.recettes.slice();
         if (filters) {
-          this.filteredRecettes = this.recettes.slice();
           if (filters.typeRepas.length > 0) {
             this.filteredRecettes = this.filteredRecettes.filter(r => filters.typeRepas.map(tr => tr.typeCode).includes(r.typeRepas));
           }
@@ -61,5 +61,9 @@ export class RecetteComponent implements OnInit, OnDestroy {
 
   isDev(): boolean {
     return !environment.production;
+  }
+
+  clearFilters() {
+    this.appService.filters.next(null);
   }
 }

@@ -13,7 +13,7 @@ import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autoco
 import { TypeRepas } from '../models/typeRepas';
 import { Filters } from '../models/filters';
 import { AppService } from '../app.service';
-import { Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 
 @Component({
   selector: 'app-recette-filtres',
@@ -67,14 +67,20 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    const filters = this.appService.filters.value;
+    const filters = new Filters();
+    let hasFilters = false;
     Object.keys(this.mealType.controls).forEach(key => {
       if (this.mealType.get(key).value) {
         filters.typeRepas.push(TypeRepas.fromTypeCode(key));
+        hasFilters = true;
       }
 
     });
-    this.appService.filters.next(filters);
+    if (hasFilters) {
+      this.appService.filters.next(filters);
+    } else {
+      this.appService.filters.next(null);
+    }
     this.dialogRef.close();
   }
 
