@@ -5,12 +5,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
 import { TypeRepas } from '../models/typeRepas';
+import { Filters } from '../models/filters';
 
 @Component({
   selector: 'app-recette-filtres',
@@ -36,7 +37,7 @@ export class RecetteFiltresComponent implements OnInit {
     totalTime: this.totalTime
   });
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private dialogRef: MatDialogRef<RecetteFiltresComponent>) {
 
   }
   ngOnInit(): void {
@@ -45,5 +46,16 @@ export class RecetteFiltresComponent implements OnInit {
     });
   }
 
+  applyFilters(): void {
+    const filters = new Filters();
+    Object.keys(this.mealType.controls).forEach(key => {
+      if (this.mealType.get(key).value) {
+        filters.typeRepas.push(TypeRepas.fromTypeCode(key));
+      }
+
+    });
+    console.log(filters);
+    this.dialogRef.close(filters);
+  }
 
 }
