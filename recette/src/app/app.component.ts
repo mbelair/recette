@@ -22,7 +22,7 @@ export class AppComponent implements AfterViewInit {
 
   @ViewChild('drawer', { static: true }) drawer: MatSidenav;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
     .pipe(
       map(result => result.matches)
     );

@@ -1,12 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { Recette } from '../models/recette';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterOutlet, RouterModule, Router } from '@angular/router';
-import { AppService } from '../app.service';
-import { MatChipsModule } from '@angular/material/chips';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { AppService } from '../app.service';
+import { Recette } from '../models/recette';
 
 
 @Component({
@@ -17,9 +19,24 @@ import { CommonModule } from '@angular/common';
   styleUrl: './recette-element.component.scss'
 })
 export class RecetteElementComponent {
-  @Input() recette!: Recette;
+  @Input() recettes: Recette[];
 
-  constructor(protected router: Router, protected service: AppService) {
+  isXSmall$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall])
+    .pipe(
+      map(result => result.matches)
+    );
+
+  isSmall$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Small])
+    .pipe(
+      map(result => result.matches)
+    );
+
+  isMedium$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Medium])
+    .pipe(
+      map(result => result.matches)
+    );
+
+  constructor(protected router: Router, protected service: AppService, private breakpointObserver: BreakpointObserver) {
 
   }
 
@@ -31,7 +48,7 @@ export class RecetteElementComponent {
     return toReturn + (time % 60) + " min";
   }
 
-  navigate() {
-    this.router.navigate(['recette-detail', this.recette.id]);
+  navigate(recette: Recette) {
+    this.router.navigate(['recette-detail', recette.id]);
   }
 }
