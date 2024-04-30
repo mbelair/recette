@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecetteElementComponent } from '../recette-element/recette-element.component';
 import { CommonModule } from '@angular/common';
 import { AppService } from '../app.service';
@@ -8,6 +8,7 @@ import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.comp
 import { Recette } from '../models/recette';
 import { environment } from '../../environments/environment';
 import { Filters } from '../models/filters';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recette',
@@ -16,12 +17,17 @@ import { Filters } from '../models/filters';
   templateUrl: './recette.component.html',
   styleUrl: './recette.component.scss'
 })
-export class RecetteComponent implements OnInit {
+export class RecetteComponent implements OnInit, OnDestroy {
 
   recettes: Recette[];
   filteredRecettes: Recette[];
+  subscription: Subscription = new Subscription();
   constructor(public appService: AppService, public dialog: MatDialog) {
 
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -30,22 +36,27 @@ export class RecetteComponent implements OnInit {
         this.recettes = recettes;
         this.filteredRecettes = this.recettes.slice();
       }
-    })
+    });
+
+
+    this.subscription.add(this.appService.filters.subscribe({
+      next: (filters) => {
+        if (filters) {
+          this.filteredRecettes = this.recettes.slice();
+          if (filters.typeRepas.length > 0) {
+            this.filteredRecettes = this.filteredRecettes.filter(r => filters.typeRepas.map(tr => tr.typeCode).includes(r.typeRepas));
+          }
+        }
+      }
+    }));
   }
 
   openFilterDialog() {
-    const dialogRef = this.dialog.open(RecetteFiltresComponent, {
+    this.dialog.open(RecetteFiltresComponent, {
       minWidth: "50%"
     });
 
-    dialogRef.afterClosed().subscribe((result: Filters) => {
-      if (result) {
-        this.filteredRecettes = this.recettes.slice();
-        if (result.typeRepas.length > 0) {
-          this.filteredRecettes = this.filteredRecettes.filter(r => result.typeRepas.map(tr => tr.typeCode).includes(r.typeRepas));
-        }
-      }
-    });
+
   }
 
   isDev(): boolean {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnDestroy, OnInit, Type } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
 import { TypeRepas } from '../models/typeRepas';
 import { Filters } from '../models/filters';
+import { AppService } from '../app.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recette-filtres',
@@ -20,7 +22,7 @@ import { Filters } from '../models/filters';
   templateUrl: './recette-filtres.component.html',
   styleUrl: './recette-filtres.component.scss'
 })
-export class RecetteFiltresComponent implements OnInit {
+export class RecetteFiltresComponent implements OnInit, OnDestroy {
 
   allMealTypes = TypeRepas.ALL;
 
@@ -37,25 +39,43 @@ export class RecetteFiltresComponent implements OnInit {
     totalTime: this.totalTime
   });
 
-  constructor(private _formBuilder: FormBuilder, private dialogRef: MatDialogRef<RecetteFiltresComponent>) {
+  subscription: Subscription = new Subscription();
+
+  constructor(private _formBuilder: FormBuilder, private dialogRef: MatDialogRef<RecetteFiltresComponent>, public appService: AppService) {
 
   }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.allMealTypes.forEach(mt => {
       this.mealType.addControl(mt.typeCode, new FormControl());
     });
+
+    this.subscription.add(this.appService.filters.subscribe({
+      next: (filters) => {
+        if (filters) {
+          if (filters.typeRepas.length > 0) {
+            filters.typeRepas.forEach(repas => {
+              this.mealType.get(repas.typeCode).setValue(true);
+            });
+          }
+        }
+      }
+    }));
   }
 
   applyFilters(): void {
-    const filters = new Filters();
+    const filters = this.appService.filters.value;
     Object.keys(this.mealType.controls).forEach(key => {
       if (this.mealType.get(key).value) {
         filters.typeRepas.push(TypeRepas.fromTypeCode(key));
       }
 
     });
-    console.log(filters);
-    this.dialogRef.close(filters);
+    this.appService.filters.next(filters);
+    this.dialogRef.close();
   }
 
 }

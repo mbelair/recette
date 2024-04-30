@@ -7,6 +7,7 @@ import { Ingredient } from './models/ingredient';
 import { Recette } from './models/recette';
 import { Tag } from './models/tag';
 import { IngredientDetail } from './models/ingredientDetail';
+import { Filters } from './models/filters';
 
 
 
@@ -19,6 +20,8 @@ export class AppService {
   allIngredients: BehaviorSubject<Ingredient[]> = new BehaviorSubject(null);
   allTags: BehaviorSubject<Tag[]> = new BehaviorSubject(null);
   private recettes: BehaviorSubject<Recette[]> = new BehaviorSubject(null);
+
+  filters: BehaviorSubject<Filters> = new BehaviorSubject(new Filters());
 
   constructor(private readonly http: HttpClient) {
 
