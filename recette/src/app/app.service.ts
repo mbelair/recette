@@ -35,20 +35,31 @@ export class AppService {
 
   getAllIngredients(search: string): Observable<Ingredient[]> {
     if (!this.allIngredients.value) {
-      if (this.ingredientCall$ == null) {
-        this.ingredientCall$ = this.http.get<Ingredient[]>(this.url + "/Ingredient").pipe(
+      if (this.isDev()) {
+        if (this.ingredientCall$ == null) {
+          this.ingredientCall$ = this.http.get<Ingredient[]>(this.url + "/Ingredient").pipe(
+            tap({
+              next: (value) => {
+                this.allIngredients.next(value);
+              }
+            }),
+            map((value) => {
+              return this.filterIngredients(search, value);
+            }),
+            share()
+          );
+        }
+        return this.ingredientCall$;
+      } else {
+        return this.getAllRecettes().pipe(map(recettes => this.filterIngredients(search, recettes.flatMap(r => r.categorieIngredient.flatMap(ci => ci.ingredient.flatMap(ir => ir.ingredient))))),
           tap({
             next: (value) => {
               this.allIngredients.next(value);
             }
-          }),
-          map((value) => {
-            return this.filterIngredients(search, value);
-          }),
-          share()
-        );
+          }),);
       }
-      return this.ingredientCall$;
+
+
     } else {
       return of(this.filterIngredients(search, this.allIngredients.value));
     }

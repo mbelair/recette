@@ -64,6 +64,10 @@ class Program
                                                    .Where($"TagRecette.Recette_Id", Id)
                                                    .GetAsync();
 
+        recette.TypeRepas = await db.Query("TypeRepas_Recette")
+                                                     .Select("TypeRepas")
+                                                     .Where($"Recette_Id", Id)
+                                                     .GetAsync<string>();
 
         recette.CategoriePreparation = CategoriePreparation.fromDynamic(preparationTask);
         recette.CategorieIngredient = CategorieIngredient.fromDynamic(ingredientTask);
