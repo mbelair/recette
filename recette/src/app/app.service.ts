@@ -111,13 +111,17 @@ export class AppService {
   }
 
   filterIngredients(search: string, ingredients: Ingredient[]): Ingredient[] {
+    let toReturn: Ingredient[];
     if (search) {
       const filterValue = this.normalize(search);
 
-      return ingredients.filter(ingredient => this.normalize(ingredient.nom).includes(filterValue));
+      toReturn = ingredients.filter(ingredient => this.normalize(ingredient.nom).includes(filterValue));
     } else {
-      return ingredients;
+      toReturn = ingredients;
     }
+    return toReturn.sort((a, b) => {
+      return a.nom.localeCompare(b.nom);
+    })
   }
 
   normalize(str: string): string {
