@@ -38,7 +38,7 @@
 </mat-form-field>
 <mat-form-field>
     <mat-label>Type de repas</mat-label>
-    <mat-select [(ngModel)]="recette.typeRepas">
+    <mat-select multiple [(ngModel)]="recette.typeRepas">
         @for (mt of allMealTypes; track mt) {
         <mat-option [value]="mt.typeCode">{{mt.label}}</mat-option>
         }

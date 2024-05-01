@@ -87,6 +87,11 @@ namespace RecetteApi.DbFacade
                                                       .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
                                                       .Where($"TagRecette.Recette_Id", recette.Id)
                                                       .GetAsync());
+
+                recette.TypeRepas = await db.Query("TypeRepas_Recette")
+                                                     .Select("TypeRepas")
+                                                     .Where($"Recette_Id", recette.Id)
+                                                     .GetAsync<string>();
             }
             return recettes;
         }
@@ -121,6 +126,11 @@ namespace RecetteApi.DbFacade
                                                        .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
                                                        .Where($"TagRecette.Recette_Id", Id)
                                                        .GetAsync();
+
+            recette.TypeRepas = await db.Query("TypeRepas_Recette")
+                                                    .Select("TypeRepas")
+                                                    .Where($"Recette_Id", recette.Id)
+                                                    .GetAsync<string>();
 
 
             recette.CategoriePreparation = CategoriePreparation.fromDynamic(preparation);
@@ -171,6 +181,15 @@ namespace RecetteApi.DbFacade
                     });
                 }
 
+                foreach (string typeRepas in newRecette.TypeRepas)
+                {
+                    await db.Query("TypeRepas_Recette").InsertAsync(new
+                    {
+                        TypeRepas = typeRepas,
+                        Recette_Id = recetteId
+                    });
+                }
+
                 tranaction.Commit();
             }
         }
@@ -192,6 +211,7 @@ namespace RecetteApi.DbFacade
                         .DeleteAsync();
                 await db.Query(CategorieIngredient.DB_TableName).Where(CategorieIngredient.DB_Recette_Id, recette.Id).DeleteAsync();
                 await db.Query("TagRecette").Where("Recette_Id", recette.Id).DeleteAsync();
+                await db.Query("TypeRepas_Recette").Where("Recette_Id", recette.Id).DeleteAsync();
 
 
                 await db.Query(Recette.DB_TableName).Where(Recette.DB_Id, recette.Id)
@@ -201,8 +221,7 @@ namespace RecetteApi.DbFacade
                           recette.TempsPreparation,
                           recette.TempsCuisson,
                           Date_modification = DateTime.UtcNow,
-                          recette.NombrePortion,
-                          recette.TypeRepas
+                          recette.NombrePortion
                       });
 
                 foreach (CategoriePreparation categoriePreparation in recette.CategoriePreparation)
@@ -235,6 +254,15 @@ namespace RecetteApi.DbFacade
                     await db.Query("TagRecette").InsertAsync(new
                     {
                         Tag_Id = tagId,
+                        Recette_Id = recette.Id
+                    });
+                }
+
+                foreach (string typeRepas in recette.TypeRepas)
+                {
+                    await db.Query("TypeRepas_Recette").InsertAsync(new
+                    {
+                        TypeRepas = typeRepas,
                         Recette_Id = recette.Id
                     });
                 }

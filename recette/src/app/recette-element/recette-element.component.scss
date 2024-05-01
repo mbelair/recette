@@ -24,6 +24,10 @@
             display: flex;
             flex-direction: column;
             flex: 1 1 100%;
+
+            mat-chip-set {
+                margin-top: auto;
+            }
         }
     }
 }

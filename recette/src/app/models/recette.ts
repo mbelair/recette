@@ -13,7 +13,7 @@ export class Recette {
     tags: Tag[];
     categoriePreparation: CategoriePreparation[];
     categorieIngredient: CategorieIngredient[];
-    typeRepas: string;
+    typeRepas: string[];
 
     constructor(defaultValues = false) {
         this.categorieIngredient = [new CategorieIngredient(defaultValues)];

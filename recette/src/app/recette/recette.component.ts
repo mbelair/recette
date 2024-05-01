@@ -8,7 +8,7 @@ import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.comp
 import { Recette } from '../models/recette';
 import { environment } from '../../environments/environment';
 import { Filters } from '../models/filters';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-recette',
@@ -19,7 +19,6 @@ import { Subscription } from 'rxjs';
 })
 export class RecetteComponent implements OnInit, OnDestroy {
 
-  recettes: Recette[];
   filteredRecettes: Recette[];
   subscription: Subscription = new Subscription();
   constructor(public appService: AppService, public dialog: MatDialog) {
@@ -31,24 +30,20 @@ export class RecetteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appService.getAllRecettes().subscribe({
-      next: (recettes: Recette[]) => {
-        this.recettes = recettes;
-        this.filteredRecettes = this.recettes.slice();
-      }
-    });
-
-
-    this.subscription.add(this.appService.filters.subscribe({
-      next: (filters) => {
-        this.filteredRecettes = this.recettes.slice();
-        if (filters) {
-          if (filters.typeRepas.length > 0) {
-            this.filteredRecettes = this.filteredRecettes.filter(r => filters.typeRepas.map(tr => tr.typeCode).includes(r.typeRepas));
+    this.subscription.add(combineLatest([this.appService.getAllRecettes(), this.appService.filters]).subscribe(
+      {
+        next: ([recettes, filters]) => {
+          if (recettes) {
+            this.filteredRecettes = recettes.slice();
+            if (filters) {
+              if (filters.typeRepas.length > 0) {
+                this.filteredRecettes = this.filteredRecettes.filter(r => filters.typeRepas.map(tr => tr.typeCode).some(typecode => r.typeRepas.includes(typecode)));
+              }
+            }
           }
         }
       }
-    }));
+    ))
   }
 
   openFilterDialog() {
