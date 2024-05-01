@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, share, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { IngredientList } from './models/IngredientList';
 import { Ingredient } from './models/ingredient';
@@ -31,21 +31,32 @@ export class AppService {
     return !environment.production;
   }
 
+  private ingredientCall$: Observable<Ingredient[]> = null;
+
   getAllIngredients(search: string): Observable<Ingredient[]> {
     if (!this.allIngredients.value) {
-      return this.http.get<Ingredient[]>(this.url + "/Ingredient").pipe(
-        tap({
-          next: (value) => {
-            this.allIngredients.next(value);
-          }
-        }),
-        map((value) => {
-          return this.filterIngredients(search, value);
-        })
-      );
+      if (this.ingredientCall$ == null) {
+        this.ingredientCall$ = this.http.get<Ingredient[]>(this.url + "/Ingredient").pipe(
+          tap({
+            next: (value) => {
+              this.allIngredients.next(value);
+            }
+          }),
+          map((value) => {
+            return this.filterIngredients(search, value);
+          }),
+          share()
+        );
+      }
+      return this.ingredientCall$;
     } else {
       return of(this.filterIngredients(search, this.allIngredients.value));
     }
+  }
+
+  clearIngredientList() {
+    this.allIngredients.next(null);
+    this.ingredientCall$ = null;
   }
 
   getAllIngredientsWithRecetteCount(): Observable<IngredientList[]> {
@@ -106,7 +117,7 @@ export class AppService {
     return this.http.post<void>(this.url + "/Ingredient", ingredient).pipe(
       tap({
         next: () => {
-          this.allIngredients.next(null);
+          this.clearIngredientList();
         }
       })
     );
@@ -116,7 +127,7 @@ export class AppService {
     return this.http.put<void>(this.url + "/Ingredient", ingredient).pipe(
       tap({
         next: () => {
-          this.allIngredients.next(null);
+          this.clearIngredientList();
         }
       })
     );

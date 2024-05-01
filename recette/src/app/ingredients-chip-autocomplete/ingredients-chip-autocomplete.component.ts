@@ -6,7 +6,9 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs';
+import { Ingredient } from '../models/ingredient';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-ingredients-chip-autocomplete',
@@ -19,41 +21,34 @@ export class IngredientsChipAutocompleteComponent {
   separatorKeysCodes: number[] = [ENTER];
 
   inputCtrl = new FormControl('');
-  filteredIngredients: Observable<string[]>;
-  ingredients: string[] = [];
-  allIngredients: string[] = ['Pomme', 'Citron', 'Lime', 'Orange', 'Fraise'];
+  filteredIngredients: Observable<Ingredient[]>;
 
   @ViewChild('input')
   input!: ElementRef<HTMLInputElement>;
 
-  @Input() text!: string;
+  @Input() text: string;
+  @Input() ingredients: Ingredient[];
 
 
-  constructor() {
+  constructor(private appService: AppService) {
     this.filteredIngredients = this.inputCtrl.valueChanges.pipe(
       startWith(null),
-      map((ingredient: string | null) => (ingredient ? this._filter(ingredient) : this.allIngredients.slice())),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((searchTerm: string | Ingredient) => {
+        const nom = typeof searchTerm === 'string' ? searchTerm : searchTerm?.nom;
+        return this.appService.getAllIngredients(nom)
+      }),
     );
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    if (!this.allIngredients.includes(value)) {
-      return;
-    }
-    // Add our ingredient
-    if (value) {
-      this.ingredients.push(value);
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-
-    this.inputCtrl.setValue(null);
+    this.selectIngredient(value);
   }
 
-  remove(ingredient: string): void {
+  remove(ingredient: Ingredient): void {
     const index = this.ingredients.indexOf(ingredient);
 
     if (index >= 0) {
@@ -62,14 +57,20 @@ export class IngredientsChipAutocompleteComponent {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.ingredients.push(event.option.viewValue);
+    this.selectIngredient(event.option.viewValue);
+  }
+
+  selectIngredient(value: string) {
+    const ingredient = this.appService.allIngredients.value.find(i => i.nom === value);
+    if (!ingredient) {
+      return;
+    } else {
+      this.ingredients.push(ingredient);
+    }
+
+    // Clear the input value
     this.input.nativeElement.value = '';
     this.inputCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allIngredients.filter(ingredient => ingredient.toLowerCase().includes(filterValue));
-  }
 }

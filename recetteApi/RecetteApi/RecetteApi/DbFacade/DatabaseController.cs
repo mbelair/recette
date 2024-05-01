@@ -92,6 +92,19 @@ namespace RecetteApi.DbFacade
                                                      .Select("TypeRepas")
                                                      .Where($"Recette_Id", recette.Id)
                                                      .GetAsync<string>();
+
+                //add categorieIngredients
+                IEnumerable<dynamic> ingredient = await db.Query(CategorieIngredient.DB_TableName)
+                                                            .Select(CategorieIngredient.getSelectcolumns())
+                                                            .Select(IngredientRecette.getSelectcolumns())
+                                                            .Select(Ingredient.GetSelectcolumns())
+                                                            .LeftJoin(IngredientRecette.DB_TableName, $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_CategorieIngredient_Id}", $"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Id}")
+                                                            .LeftJoin(Ingredient.DB_TableName, $"{Ingredient.DB_TableName}.{Ingredient.DB_Id}", $"{IngredientRecette.DB_TableName}.{IngredientRecette.DB_Ingredient_Id}")
+                                                            .Where($"{CategorieIngredient.DB_TableName}.{CategorieIngredient.DB_Recette_Id}", recette.Id)
+                                                            .GetAsync();
+
+
+                recette.CategorieIngredient = CategorieIngredient.fromDynamic(ingredient);
             }
             return recettes;
         }

@@ -8,7 +8,8 @@
                         Inclure un ingrédient
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <app-ingredients-chip-autocomplete text="Inclure un ingrédient"></app-ingredients-chip-autocomplete>
+                <app-ingredients-chip-autocomplete [ingredients]="ingredientsToInclude"
+                    text="Inclure un ingrédient"></app-ingredients-chip-autocomplete>
             </mat-expansion-panel>
             <mat-expansion-panel hideToggle>
                 <mat-expansion-panel-header>
@@ -16,7 +17,8 @@
                         Exclure un ingrédient
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <app-ingredients-chip-autocomplete text="Exclure un ingrédient"></app-ingredients-chip-autocomplete>
+                <app-ingredients-chip-autocomplete [ingredients]="ingredientsToExclude"
+                    text="Exclure un ingrédient"></app-ingredients-chip-autocomplete>
             </mat-expansion-panel>
             <mat-expansion-panel hideToggle>
                 <mat-expansion-panel-header>

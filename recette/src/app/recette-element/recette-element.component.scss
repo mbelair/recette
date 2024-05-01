@@ -29,5 +29,10 @@
                 margin-top: auto;
             }
         }
+
+        mat-card-title {
+            line-height: --mat-card-title-text-line-height;
+            min-height: calc(var(--mat-card-title-text-line-height) * 3);
+        }
     }
 }

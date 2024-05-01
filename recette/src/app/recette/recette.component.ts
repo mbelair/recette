@@ -36,9 +36,30 @@ export class RecetteComponent implements OnInit, OnDestroy {
           if (recettes) {
             this.filteredRecettes = recettes.slice();
             if (filters) {
-              if (filters.typeRepas.length > 0) {
-                this.filteredRecettes = this.filteredRecettes.filter(r => filters.typeRepas.map(tr => tr.typeCode).some(typecode => r.typeRepas.includes(typecode)));
-              }
+              this.filteredRecettes = this.filteredRecettes.filter(r => {
+                let isFilteredIn = true;
+                if (filters.typeRepas.length > 0) {
+                  isFilteredIn = filters.typeRepas.map(tr => tr.typeCode).some(typecode => r.typeRepas.includes(typecode));
+                }
+                if (!isFilteredIn) {
+                  return false;
+                }
+                if (filters.includedIngredients.length > 0) {
+                  isFilteredIn = filters.includedIngredients.map(i => i.id).every(id => r.categorieIngredient.flatMap(ci => ci.ingredient).map(i => i.ingredient_Id).includes(id));
+                }
+                if (!isFilteredIn) {
+                  return false;
+                }
+
+                if (filters.excludedIngredients.length > 0) {
+                  isFilteredIn = filters.excludedIngredients.map(i => i.id).every(id => r.categorieIngredient.flatMap(ci => ci.ingredient).map(i => i.ingredient_Id).indexOf(id) === -1);
+                }
+                if (!isFilteredIn) {
+                  return false;
+                }
+
+                return isFilteredIn;
+              });
             }
           }
         }

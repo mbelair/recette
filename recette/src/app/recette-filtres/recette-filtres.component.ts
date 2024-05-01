@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, Type } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -9,11 +9,12 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
-import { TypeRepas } from '../models/typeRepas';
-import { Filters } from '../models/filters';
+import { Subscription } from 'rxjs';
 import { AppService } from '../app.service';
-import { Subscription, filter } from 'rxjs';
+import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
+import { Filters } from '../models/filters';
+import { Ingredient } from '../models/ingredient';
+import { TypeRepas } from '../models/typeRepas';
 
 @Component({
   selector: 'app-recette-filtres',
@@ -23,6 +24,9 @@ import { Subscription, filter } from 'rxjs';
   styleUrl: './recette-filtres.component.scss'
 })
 export class RecetteFiltresComponent implements OnInit, OnDestroy {
+  ingredientsToInclude: Ingredient[] = [];
+  ingredientsToExclude: Ingredient[] = [];
+
 
   allMealTypes = TypeRepas.ALL;
 
@@ -68,7 +72,7 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
 
   applyFilters(): void {
     const filters = new Filters();
-    let hasFilters = false;
+    let hasFilters = this.ingredientsToInclude.length > 0 || this.ingredientsToExclude.length > 0;
     Object.keys(this.mealType.controls).forEach(key => {
       if (this.mealType.get(key).value) {
         filters.typeRepas.push(TypeRepas.fromTypeCode(key));
@@ -76,6 +80,9 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
       }
 
     });
+    filters.includedIngredients = this.ingredientsToInclude;
+    filters.excludedIngredients = this.ingredientsToExclude;
+
     if (hasFilters) {
       this.appService.filters.next(filters);
     } else {
