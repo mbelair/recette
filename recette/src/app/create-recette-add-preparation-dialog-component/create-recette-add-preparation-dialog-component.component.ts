@@ -57,7 +57,6 @@ export class CreateRecetteAddPreparationDialogComponentComponent {
       }
     }
 
-
     this.categoryCtrl.setValue(chosenCategory.id);
 
     this.categoriePreparation = [];

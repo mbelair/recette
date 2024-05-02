@@ -57,19 +57,23 @@ export class CreateRecetteAddIngredientDialogComponent implements OnInit {
     private appService: AppService
   ) {
     this.recette = data.recette;
+    let chosenCategory = null;
     if (data.ingredient) {
-      const chosenCategory = this.recette.categorieIngredient.find(ci => ci.ingredient.includes(data.ingredient));
+      chosenCategory = this.recette.categorieIngredient.find(ci => ci.ingredient.includes(data.ingredient));
       this.ingredientCtrl.setValue(data.ingredient.ingredient);
-      this.categoryCtrl.setValue(chosenCategory.id);
       this.quantiteCtrl.setValue(data.ingredient.quantite)
       this.uniteCtrl.setValue(data.ingredient.unite);
       this.detailCtrl.setValue(data.ingredient.detail);
       this.editingIngredient = data.ingredient;
     } else {
-      const chosenCategory = this.recette.categorieIngredient.find(ci => ci.isDefaultCategory);
-      this.categoryCtrl.setValue(chosenCategory.id);
+      chosenCategory = this.recette.categorieIngredient.find(ci => ci.isDefaultCategory);
+      if (!chosenCategory) {
+        chosenCategory = new CategorieIngredient(true);
+        this.recette.categorieIngredient.push(chosenCategory);
+      }
     }
 
+    this.categoryCtrl.setValue(chosenCategory.id);
 
     this.categorieIngredient = [];
     this.recette.categorieIngredient.map(ci => this.categorieIngredient.push(ci));
