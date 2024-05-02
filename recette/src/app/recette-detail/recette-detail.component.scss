@@ -13,4 +13,18 @@
             text-decoration: line-through;
         }
     }
+
+    .recetteDiv {
+        display: flex;
+        flex-direction: row;
+
+        .ingredientDiv,
+        .preparationDiv {
+            flex: 1 1 100%;
+        }
+
+        &.isColumnFlex {
+            flex-direction: column;
+        }
+    }
 }

@@ -190,11 +190,22 @@ export class AppService {
   }
 
   getRecette(id: number): Observable<Recette> {
+    let recette$: Observable<Recette> = null;
     if (this.isDev()) {
-      return this.http.get<Recette>(this.url + "/Recette/" + id);
+      recette$ = this.http.get<Recette>(this.url + "/Recette/" + id);
     } else {
-      return this.getAllRecettes().pipe(map(recettes => recettes.find(recette => recette.id == id)));
+      recette$ = this.getAllRecettes().pipe(map(recettes => recettes.find(recette => recette.id == id)));
     }
+    return recette$.pipe(
+      map(value => {
+        value.categorieIngredient.sort((a, b) => a.ordre - b.ordre);
+        value.categorieIngredient.forEach(ci => ci.ingredient.sort((a, b) => a.ordre - b.ordre));
+
+        value.categoriePreparation.sort((a, b) => a.ordre - b.ordre);
+        value.categoriePreparation.forEach(ci => ci.preparation.sort((a, b) => a.ordre - b.ordre));
+        return value;
+      })
+    );
   }
 
 }

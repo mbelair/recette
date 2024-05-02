@@ -1,29 +1,35 @@
 <div *ngIf="recette != null" class="recette-detail">
     <h1>{{recette.nom}}</h1>
     <button *ngIf="isDev()" mat-stroked-button (click)="editRecette()">Modifier</button>
-    <h2>Ingrédients</h2>
-    <div *ngFor="let ci of recette.categorieIngredient">
-        <h3 *ngIf="!ci.isDefaultCategory">{{ci.nom}}</h3>
-        <ul>
-            <li *ngFor="let i of ci.ingredient">
-                <mat-checkbox color="primary">
-                    {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
-                </mat-checkbox>
+    <div class="recetteDiv" [ngClass]="{'isColumnFlex': (isColumnFlex$|async)}">
+        <div class="ingredientDiv">
+            <h2>Ingrédients</h2>
+            <div *ngFor="let ci of recette.categorieIngredient">
+                <h3 *ngIf="!ci.isDefaultCategory">{{ci.nom}}</h3>
+                <ul>
+                    <li *ngFor="let i of ci.ingredient">
+                        <mat-checkbox color="primary">
+                            {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
+                        </mat-checkbox>
 
-                <!-- <label><input type="checkbox"> 
+                        <!-- <label><input type="checkbox"> 
                 </label> -->
-            </li>
-        </ul>
-    </div>
-    <h2>Préparation</h2>
-    <div *ngFor="let cp of recette.categoriePreparation">
-        <h3 *ngIf="!cp.isDefaultCategory">{{cp.nom}}</h3>
-        <ul>
-            <li *ngFor="let p of cp.preparation">
-                <mat-checkbox>
-                    {{p.ordre+1}}. {{p.text}}
-                </mat-checkbox>
-            </li>
-        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="preparationDiv">
+            <h2>Préparation</h2>
+            <div *ngFor="let cp of recette.categoriePreparation">
+                <h3 *ngIf="!cp.isDefaultCategory">{{cp.nom}}</h3>
+                <ul>
+                    <li *ngFor="let p of cp.preparation">
+                        <mat-checkbox>
+                            {{p.ordre+1}}. {{p.text}}
+                        </mat-checkbox>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>

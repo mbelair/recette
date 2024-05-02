@@ -8,6 +8,8 @@ import { UniteMesure } from '../models/uniteMesure';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../environments/environment';
+import { Observable, map } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 
 @Component({
@@ -21,9 +23,14 @@ export class RecetteDetailComponent implements OnInit {
 
   id: number = -1;
   recette: Recette = null;
-  constructor(public service: AppService, private route: ActivatedRoute, protected router: Router) {
+  constructor(public service: AppService, private route: ActivatedRoute, protected router: Router, private breakpointObserver: BreakpointObserver) {
 
   }
+
+  isColumnFlex$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+    .pipe(
+      map(result => result.matches)
+    );
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
