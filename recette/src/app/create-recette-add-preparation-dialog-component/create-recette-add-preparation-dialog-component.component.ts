@@ -43,16 +43,22 @@ export class CreateRecetteAddPreparationDialogComponentComponent {
   ) {
     this.recette = data.recette;
 
+    let chosenCategory = null;
     if (data.step) {
-      const chosenCategory = this.recette.categoriePreparation.find(cp => cp.preparation.includes(data.step));
-      this.categoryCtrl.setValue(chosenCategory.id);
+      chosenCategory = this.recette.categoriePreparation.find(cp => cp.preparation.includes(data.step));
+
       this.detailCtrl.setValue(data.step.text);
       this.editingStep = data.step;
     } else {
-      const chosenCategory = this.recette.categoriePreparation.find(ci => ci.isDefaultCategory);
-      this.categoryCtrl.setValue(chosenCategory.id);
+      chosenCategory = this.recette.categoriePreparation.find(ci => ci.isDefaultCategory);
+      if (!chosenCategory) {
+        chosenCategory = new CategoriePreparation(true);
+        this.recette.categoriePreparation.push(chosenCategory);
+      }
     }
 
+
+    this.categoryCtrl.setValue(chosenCategory.id);
 
     this.categoriePreparation = [];
     this.recette.categoriePreparation.map(ci => this.categoriePreparation.push(ci));

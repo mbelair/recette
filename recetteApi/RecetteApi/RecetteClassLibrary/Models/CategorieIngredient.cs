@@ -44,7 +44,10 @@
                     toReturn.Add(new CategorieIngredient(result));
                 }
                 CategorieIngredient ci = toReturn.Find(x => x.Id == id)!;
-                ci.Ingredient.Add(new IngredientRecette(result));
+                if (result.IngredientRecetteIngredient_Id != null)
+                {
+                    ci.Ingredient.Add(new IngredientRecette(result));
+                }
             }
             return toReturn;
         }

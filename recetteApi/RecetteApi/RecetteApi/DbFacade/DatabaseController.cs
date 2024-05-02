@@ -239,21 +239,27 @@ namespace RecetteApi.DbFacade
 
                 foreach (CategoriePreparation categoriePreparation in recette.CategoriePreparation)
                 {
-                    int categorieId = await db.Query("CategoriePreparation").InsertGetIdAsync<int>(categoriePreparation.toDbModel(recette.Id));
-                    foreach (Preparation preparation in categoriePreparation.Preparation)
+                    if (categoriePreparation.Preparation.Count() > 0)
                     {
-                        await db.Query("Preparation").InsertAsync(preparation.toDbModel(categorieId));
+                        int categorieId = await db.Query("CategoriePreparation").InsertGetIdAsync<int>(categoriePreparation.toDbModel(recette.Id));
+                        foreach (Preparation preparation in categoriePreparation.Preparation)
+                        {
+                            await db.Query("Preparation").InsertAsync(preparation.toDbModel(categorieId));
 
+                        }
                     }
                 }
 
                 foreach (CategorieIngredient categorieIngredient in recette.CategorieIngredient)
                 {
-                    int categorieId = await db.Query("CategorieIngredient").InsertGetIdAsync<int>(categorieIngredient.toDbModel(recette.Id));
-                    foreach (IngredientRecette ingredient in categorieIngredient.Ingredient)
+                    if (categorieIngredient.Ingredient.Count() > 0)
                     {
-                        await db.Query("IngredientRecette").InsertAsync(ingredient.toDbModel(categorieId));
+                        int categorieId = await db.Query("CategorieIngredient").InsertGetIdAsync<int>(categorieIngredient.toDbModel(recette.Id));
+                        foreach (IngredientRecette ingredient in categorieIngredient.Ingredient)
+                        {
+                            await db.Query("IngredientRecette").InsertAsync(ingredient.toDbModel(categorieId));
 
+                        }
                     }
                 }
 
