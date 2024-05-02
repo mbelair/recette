@@ -1,6 +1,10 @@
 export class UniteMesure {
+    static readonly TASSE = new UniteMesure('01', 'tasse');
+    static readonly C_A_SOUPE = new UniteMesure('02', 'c. à soupe');
+    static readonly C_A_THE = new UniteMesure('03', 'c. à thé');
     static readonly ML = new UniteMesure('04', 'mL');
     static readonly G = new UniteMesure('05', 'g');
+    static readonly LB = new UniteMesure('06', 'lb');
     static readonly UNITE = new UniteMesure('07', 'unité');
     static readonly AUCUN = new UniteMesure('08', 'aucun');
     static readonly PINCEE = new UniteMesure('09', 'pincée');
