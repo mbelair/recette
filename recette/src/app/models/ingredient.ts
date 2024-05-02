@@ -3,6 +3,14 @@ export class Ingredient {
     id: number;
     nom: string;
     category: IngredientCategoryEnum;
+
+    static fromIngredient(i: Ingredient): Ingredient {
+        const toReturn = new Ingredient();
+        toReturn.id = i.id;
+        toReturn.nom = i.nom;
+        toReturn.category = i.category;
+        return toReturn;
+    }
 }
 
 export function allCategories(): IngredientCategoryEnum[] {

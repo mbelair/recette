@@ -198,12 +198,7 @@ export class AppService {
     }
     return recette$.pipe(
       map(value => {
-        value.categorieIngredient.sort((a, b) => a.ordre - b.ordre);
-        value.categorieIngredient.forEach(ci => ci.ingredient.sort((a, b) => a.ordre - b.ordre));
-
-        value.categoriePreparation.sort((a, b) => a.ordre - b.ordre);
-        value.categoriePreparation.forEach(ci => ci.preparation.sort((a, b) => a.ordre - b.ordre));
-        return value;
+        return Recette.fromRecette(value);
       })
     );
   }

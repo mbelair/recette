@@ -9,11 +9,8 @@
                 <ul>
                     <li *ngFor="let i of ci.ingredient">
                         <mat-checkbox color="primary">
-                            {{i.quantite}} {{getUnitLabel(i)}} {{i.ingredient.nom}} {{i.detail}}
+                            {{i.getLabel()}}
                         </mat-checkbox>
-
-                        <!-- <label><input type="checkbox"> 
-                </label> -->
                     </li>
                 </ul>
             </div>
