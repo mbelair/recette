@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, share, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { IngredientList } from './models/IngredientList';
+import { TagList } from './models/TagList';
+import { Filters } from './models/filters';
 import { Ingredient } from './models/ingredient';
+import { IngredientDetail } from './models/ingredientDetail';
 import { Recette } from './models/recette';
 import { Tag } from './models/tag';
-import { IngredientDetail } from './models/ingredientDetail';
-import { Filters } from './models/filters';
-import { TagList } from './models/TagList';
 
 
 
@@ -33,6 +33,7 @@ export class AppService {
   }
 
   private ingredientCall$: Observable<Ingredient[]> = null;
+  private tagsCall$: Observable<Tag[]> = null;
 
   getAllIngredients(search: string): Observable<Ingredient[]> {
     if (!this.allIngredients.value) {
@@ -52,12 +53,25 @@ export class AppService {
         }
         return this.ingredientCall$;
       } else {
-        return this.getAllRecettes().pipe(map(recettes => this.filterIngredients(search, recettes.flatMap(r => r.categorieIngredient.flatMap(ci => ci.ingredient.flatMap(ir => ir.ingredient))))),
+        return this.getAllRecettes().pipe(
+          map(recettes => {
+            const ingredients: Map<number, Ingredient> = new Map<number, Ingredient>();
+
+            this.filterIngredients(search, recettes.flatMap(r => r.categorieIngredient.flatMap(ci => ci.ingredient.flatMap(ir => ir.ingredient))))
+
+            recettes.flatMap(r => r.categorieIngredient.flatMap(ci => ci.ingredient.flatMap(ir => ir.ingredient))).forEach(i => {
+              if (!ingredients.has(i.id)) {
+                ingredients.set(i.id, i);
+              }
+            });
+
+            return Array.from(ingredients.values());
+          }),
           tap({
             next: (value) => {
               this.allIngredients.next(value);
             }
-          }),);
+          }));
       }
 
 
@@ -99,16 +113,39 @@ export class AppService {
 
   getAllTags(search: string): Observable<Tag[]> {
     if (!this.allTags.value) {
-      return this.http.get<Tag[]>(this.url + "/Tag").pipe(
-        tap({
-          next: (value) => {
-            this.allTags.next(value);
-          }
-        }),
-        map((value) => {
-          return this.filterTags(search, value);
-        })
-      );
+      if (this.isDev()) {
+        if (this.tagsCall$ == null) {
+          this.tagsCall$ = this.http.get<Tag[]>(this.url + "/Tag").pipe(
+            tap({
+              next: (value) => {
+                this.allTags.next(value);
+              }
+            }),
+            map((value) => {
+              return this.filterTags(search, value);
+            }),
+            share()
+          );
+        }
+        return this.tagsCall$;
+      } else {
+        return this.getAllRecettes().pipe(
+          map(recettes => {
+            const tags: Map<number, Tag> = new Map<number, Tag>();
+            recettes.flatMap(r => r.tags).forEach(t => {
+              if (!tags.has(t.id)) {
+                tags.set(t.id, t);
+              }
+            });
+
+            return Array.from(tags.values());
+          }),
+          tap({
+            next: (value) => {
+              this.allTags.next(value);
+            }
+          }));
+      }
     } else {
       return of(this.filterTags(search, this.allTags.value));
     }
