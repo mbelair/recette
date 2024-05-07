@@ -3,5 +3,8 @@
 <button (click)="clearFilters()" *ngIf="(appService.filters | async) != null" mat-button>Supprimer tous les filtres
     appliqués</button>
 
-
+<mat-form-field class="filter">
+    <mat-label>Filtre</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
 <app-recette-element [recettes]="filteredRecettes"></app-recette-element>

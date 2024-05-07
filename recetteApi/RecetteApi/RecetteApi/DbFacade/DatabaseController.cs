@@ -295,6 +295,28 @@ namespace RecetteApi.DbFacade
         {
             return await db.Query("Tag").GetAsync<Tag>();
         }
+
+        public async Task<IEnumerable<TagList>> GetAllTagsWithRecetteCountAsync()
+        {
+            IEnumerable<dynamic> tags = await db.Query(Tag.DB_TableName).Select(Tag.getSelectcolumns())
+                .SelectRaw($"count(distinct \"{Recette.DB_TableName}\".\"{Recette.DB_Id}\") as \"recetteCount\"")
+                .LeftJoin("TagRecette", $"TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
+                .LeftJoin(Recette.DB_TableName, $"TagRecette.Recette_Id", $"{Recette.DB_TableName}.{Recette.DB_Id}")
+                .GroupBy($"{Tag.DB_TableName}.{Tag.DB_Id}")
+                .GetAsync();
+
+            return tags.Select(x => new TagList(x));
+        }
+
+        public async Task UpdateTag(Tag updatedTag)
+        {
+            await db.Query(Tag.DB_TableName).Where(Tag.DB_Id, updatedTag.Id).UpdateAsync(updatedTag.toDbModel());
+        }
+
+        public async Task DeleteTag(int id)
+        {
+            await db.Query(Tag.DB_TableName).Where(Tag.DB_Id, id).DeleteAsync();
+        }
         #endregion
     }
 }

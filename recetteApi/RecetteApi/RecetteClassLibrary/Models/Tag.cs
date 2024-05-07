@@ -21,6 +21,11 @@
         public Tag() { }
         public Tag(dynamic dbResult)
         {
+            this.FromDynamic(dbResult);
+        }
+
+        protected void FromDynamic(dynamic dbResult)
+        {
             this.Id = dbResult.TagId;
             this.Nom = dbResult.TagNom;
         }

@@ -8,6 +8,7 @@ import { Recette } from './models/recette';
 import { Tag } from './models/tag';
 import { IngredientDetail } from './models/ingredientDetail';
 import { Filters } from './models/filters';
+import { TagList } from './models/TagList';
 
 
 
@@ -79,7 +80,21 @@ export class AppService {
   }
 
   deleteIngredient(ingredient: Ingredient): Observable<void> {
-    return this.http.delete<void>(this.url + "/Ingredient/" + ingredient.id);
+    return this.http.delete<void>(this.url + "/Ingredient/" + ingredient.id).pipe(
+      tap({
+        next: () => {
+          this.clearIngredientList();
+        }
+      }));
+  }
+
+  deleteTag(tag: Tag): Observable<void> {
+    return this.http.delete<void>(this.url + "/Tag/" + tag.id).pipe(
+      tap({
+        next: () => {
+          this.allTags.next(null);
+        }
+      }));
   }
 
   getAllTags(search: string): Observable<Tag[]> {
@@ -97,6 +112,10 @@ export class AppService {
     } else {
       return of(this.filterTags(search, this.allTags.value));
     }
+  }
+
+  getAllTagsWithRecetteCount(): Observable<TagList[]> {
+    return this.http.get<TagList[]>(this.url + "/Tag/list");
   }
 
 
@@ -143,6 +162,16 @@ export class AppService {
       tap({
         next: () => {
           this.clearIngredientList();
+        }
+      })
+    );
+  }
+
+  updateTag(tag: Tag): Observable<void> {
+    return this.http.put<void>(this.url + "/Tag", tag).pipe(
+      tap({
+        next: () => {
+          this.allTags.next(null);
         }
       })
     );

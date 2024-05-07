@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{this.title}}</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="data.nom">
+    </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+    <button (click)="onCancelClick()" mat-stroked-button>Cancel</button>
+    <button (click)="onOkClick()" mat-flat-button color="primary">Ok</button>
+</div>

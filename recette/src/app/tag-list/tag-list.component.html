@@ -1,0 +1,37 @@
+<h1>Étiquettes</h1>
+<mat-form-field>
+    <mat-label>Filtre</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+<table matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nom">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="recetteCount">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Nombre de recettes</th>
+        <td mat-cell *matCellDef="let element"> {{element.recetteCount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+            <button (click)="openEditTagDialog(element, $event)" mat-icon-button color="primary">
+                <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button *ngIf="element.recetteCount === 0" (click)="openDeleteTagDialog(element,$event)" mat-icon-button
+                color="primary">
+                <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row (click)="handleRowClicked(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
