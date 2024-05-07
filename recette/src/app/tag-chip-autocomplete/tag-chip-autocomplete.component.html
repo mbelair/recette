@@ -1,0 +1,21 @@
+<form>
+    <mat-form-field>
+        <mat-chip-grid #chipGrid>
+            @for (tag of tags; track tag) {
+            <mat-chip-row (removed)="remove(tag)">
+                {{tag.nom}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+            }
+        </mat-chip-grid>
+        <input #input [placeholder]="text" [formControl]="inputCtrl" [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto" (matChipInputTokenEnd)="add($event)" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            @for (tag of filteredTags | async; track tag) {
+            <mat-option [value]="tag">{{tag.nom}}</mat-option>
+            }
+        </mat-autocomplete>
+    </mat-form-field>
+</form>

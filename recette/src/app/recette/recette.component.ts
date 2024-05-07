@@ -7,7 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RecetteFiltresComponent } from '../recette-filtres/recette-filtres.component';
 import { Recette } from '../models/recette';
 import { environment } from '../../environments/environment';
-import { Filters } from '../models/filters';
+import { Filters, TempsTotal } from '../models/filters';
 import { Subscription, combineLatest } from 'rxjs';
 
 @Component({
@@ -56,6 +56,36 @@ export class RecetteComponent implements OnInit, OnDestroy {
                 }
                 if (!isFilteredIn) {
                   return false;
+                }
+
+                if (filters.tags.length > 0) {
+                  isFilteredIn = filters.tags.map(i => i.id).every(id => r.tags.map(i => i.id).includes(id));
+                }
+                if (!isFilteredIn) {
+                  return false;
+                }
+                if (filters.tempsTotal.length > 0) {
+                  isFilteredIn = false;
+                  const tempsTotal = r.tempsCuisson + r.tempsPreparation;
+                  filters.tempsTotal.forEach(t => {
+                    switch (t) {
+                      case TempsTotal.LESS30:
+                        if (tempsTotal < 30) {
+                          isFilteredIn = true;
+                        }
+                        break;
+                      case TempsTotal.FROM_30_TO_60:
+                        if (tempsTotal >= 30 && tempsTotal <= 60) {
+                          isFilteredIn = true;
+                        }
+                        break;
+                      case TempsTotal.MORE60:
+                        if (tempsTotal > 60) {
+                          isFilteredIn = true;
+                        }
+                        break;
+                    }
+                  });
                 }
 
                 return isFilteredIn;

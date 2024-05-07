@@ -7,35 +7,35 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Observable, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { AppService } from '../app.service';
-import { Ingredient } from '../models/ingredient';
+import { Tag } from '../models/tag';
 
 @Component({
-  selector: 'app-ingredients-chip-autocomplete',
+  selector: 'app-tag-chip-autocomplete',
   standalone: true,
   imports: [MatAutocompleteModule, CommonModule, MatInputModule, ReactiveFormsModule, MatChipsModule, MatIconModule],
-  templateUrl: './ingredients-chip-autocomplete.component.html',
-  styleUrl: './ingredients-chip-autocomplete.component.scss'
+  templateUrl: './tag-chip-autocomplete.component.html',
+  styleUrl: './tag-chip-autocomplete.component.scss'
 })
-export class IngredientsChipAutocompleteComponent {
+export class TagChipAutocompleteComponent {
 
   inputCtrl = new FormControl('');
-  filteredIngredients: Observable<Ingredient[]>;
+  filteredTags: Observable<Tag[]>;
 
   @ViewChild('input')
   input!: ElementRef<HTMLInputElement>;
 
   @Input() text: string;
-  @Input() ingredients: Ingredient[];
+  @Input() tags: Tag[];
 
 
   constructor(private appService: AppService) {
-    this.filteredIngredients = this.inputCtrl.valueChanges.pipe(
+    this.filteredTags = this.inputCtrl.valueChanges.pipe(
       startWith(null),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((searchTerm: string | Ingredient) => {
+      switchMap((searchTerm: string | Tag) => {
         const nom = typeof searchTerm === 'string' ? searchTerm : searchTerm?.nom;
-        return this.appService.getAllIngredients(nom)
+        return this.appService.getAllTags(nom);
       }),
     );
   }
@@ -43,27 +43,27 @@ export class IngredientsChipAutocompleteComponent {
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    this.selectIngredient(value);
+    this.selectTag(value);
   }
 
-  remove(ingredient: Ingredient): void {
-    const index = this.ingredients.indexOf(ingredient);
+  remove(tag: Tag): void {
+    const index = this.tags.indexOf(tag);
 
     if (index >= 0) {
-      this.ingredients.splice(index, 1);
+      this.tags.splice(index, 1);
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectIngredient(event.option.viewValue);
+    this.selectTag(event.option.viewValue);
   }
 
-  selectIngredient(value: string) {
-    const ingredient = this.appService.allIngredients.value.find(i => i.nom === value);
-    if (!ingredient) {
+  selectTag(value: string) {
+    const tag = this.appService.allTags.value.find(i => i.nom === value);
+    if (!tag) {
       return;
     } else {
-      this.ingredients.push(ingredient);
+      this.tags.push(tag);
     }
 
     // Clear the input value

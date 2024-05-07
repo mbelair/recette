@@ -6,7 +6,7 @@ export class Filters {
     includedIngredients: Ingredient[];
     excludedIngredients: Ingredient[];
     typeRepas: TypeRepas[] = [];
-    tempsTotal: TempsTotal[];
+    tempsTotal: TempsTotal[] = [];
     tags: Tag[];
 }
 

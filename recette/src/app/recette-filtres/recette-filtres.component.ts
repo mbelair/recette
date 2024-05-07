@@ -12,20 +12,23 @@ import { MatInputModule } from '@angular/material/input';
 import { Subscription } from 'rxjs';
 import { AppService } from '../app.service';
 import { IngredientsChipAutocompleteComponent } from '../ingredients-chip-autocomplete/ingredients-chip-autocomplete.component';
-import { Filters } from '../models/filters';
+import { Filters, TempsTotal } from '../models/filters';
 import { Ingredient } from '../models/ingredient';
 import { TypeRepas } from '../models/typeRepas';
+import { TagChipAutocompleteComponent } from '../tag-chip-autocomplete/tag-chip-autocomplete.component';
+import { Tag } from '../models/tag';
 
 @Component({
   selector: 'app-recette-filtres',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, MatAutocompleteModule, CommonModule, MatInputModule, ReactiveFormsModule, MatChipsModule, MatIconModule, IngredientsChipAutocompleteComponent],
+  imports: [MatDialogModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, MatAutocompleteModule, CommonModule, MatInputModule, ReactiveFormsModule, MatChipsModule, MatIconModule, IngredientsChipAutocompleteComponent, TagChipAutocompleteComponent],
   templateUrl: './recette-filtres.component.html',
   styleUrl: './recette-filtres.component.scss'
 })
 export class RecetteFiltresComponent implements OnInit, OnDestroy {
   ingredientsToInclude: Ingredient[] = [];
   ingredientsToExclude: Ingredient[] = [];
+  tags: Tag[] = [];
 
 
   allMealTypes = TypeRepas.ALL;
@@ -65,6 +68,23 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
               this.mealType.get(repas.typeCode).setValue(true);
             });
           }
+          this.ingredientsToInclude = filters.includedIngredients;
+          this.ingredientsToExclude = filters.excludedIngredients;
+          this.tags = filters.tags;
+
+          filters.tempsTotal.forEach(t => {
+            switch (t) {
+              case TempsTotal.LESS30:
+                this.totalTime.controls.less30.setValue(true);
+                break;
+              case TempsTotal.FROM_30_TO_60:
+                this.totalTime.controls.from30to60.setValue(true);
+                break;
+              case TempsTotal.MORE60:
+                this.totalTime.controls.more60.setValue(true);
+                break;
+            }
+          })
         }
       }
     }));
@@ -72,7 +92,7 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
 
   applyFilters(): void {
     const filters = new Filters();
-    let hasFilters = this.ingredientsToInclude.length > 0 || this.ingredientsToExclude.length > 0;
+    let hasFilters = this.ingredientsToInclude.length > 0 || this.ingredientsToExclude.length > 0 || this.tags.length > 0;
     Object.keys(this.mealType.controls).forEach(key => {
       if (this.mealType.get(key).value) {
         filters.typeRepas.push(TypeRepas.fromTypeCode(key));
@@ -82,6 +102,20 @@ export class RecetteFiltresComponent implements OnInit, OnDestroy {
     });
     filters.includedIngredients = this.ingredientsToInclude;
     filters.excludedIngredients = this.ingredientsToExclude;
+    filters.tags = this.tags;
+
+    if (this.totalTime.controls.from30to60.value) {
+      filters.tempsTotal.push(TempsTotal.FROM_30_TO_60);
+      hasFilters = true;
+    }
+    if (this.totalTime.controls.less30.value) {
+      filters.tempsTotal.push(TempsTotal.LESS30);
+      hasFilters = true;
+    }
+    if (this.totalTime.controls.more60.value) {
+      filters.tempsTotal.push(TempsTotal.MORE60);
+      hasFilters = true;
+    }
 
     if (hasFilters) {
       this.appService.filters.next(filters);
