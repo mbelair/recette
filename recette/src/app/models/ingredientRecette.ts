@@ -116,8 +116,8 @@ export class IngredientRecette {
 
 
         } else if (unite === UniteMesure.G) {
-            const lbs = Math.round(((this.quantite / 450) + Number.EPSILON) * 100) / 100
-            return `${lbs} ${UniteMesure.LB.getFormatedLabel(lbs > 1)}`;
+            const lbs = this.quantite / 450;
+            return `${Intl.NumberFormat("fr-CA", { maximumSignificantDigits: 2 }).format(lbs)} ${UniteMesure.LB.getFormatedLabel(lbs > 1)}`;
         }
         return "";
 
