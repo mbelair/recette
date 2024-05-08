@@ -49,7 +49,7 @@ namespace RecetteApi.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IngredientDetail> GetByIdWithRecetteCount(int id)
+        public async Task<IngredientDetail> GetIngredientByIdWithRecettes(int id)
         {
             return await this._databaseController.GetIngredientByIdWithRecettes(id);
         }

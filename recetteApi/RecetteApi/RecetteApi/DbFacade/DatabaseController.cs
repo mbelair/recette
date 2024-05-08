@@ -308,6 +308,29 @@ namespace RecetteApi.DbFacade
             return tags.Select(x => new TagList(x));
         }
 
+        public async Task<TagDetail> GetTagByIdWithRecettes(int id)
+        {
+            TagDetail tag = await db.Query(Tag.DB_TableName)
+                .Where($"{Tag.DB_TableName}.{Tag.DB_Id}", id)
+                .FirstOrDefaultAsync<TagDetail>();
+
+            IEnumerable<Recette> recettes = Recette.fromDynamic(await db.Query(Recette.DB_TableName)
+                .Select(Recette.getSelectcolumns())
+                .LeftJoin("TagRecette", $"TagRecette.Recette_Id", $"{Recette.DB_TableName}.{Recette.DB_Id}")
+                .Where($"TagRecette.Tag_Id", id)
+                .GetAsync());
+            tag.Recettes = recettes;
+            foreach (Recette recette in recettes)
+            {
+                recette.Tags = Tag.fromDynamic(await db.Query(Tag.DB_TableName)
+                                                      .Select(Tag.getSelectcolumns())
+                                                      .LeftJoin("TagRecette", "TagRecette.Tag_Id", $"{Tag.DB_TableName}.{Tag.DB_Id}")
+                                                      .Where($"TagRecette.Recette_Id", recette.Id)
+                                                      .GetAsync());
+            }
+            return tag;
+        }
+
         public async Task UpdateTag(Tag updatedTag)
         {
             await db.Query(Tag.DB_TableName).Where(Tag.DB_Id, updatedTag.Id).UpdateAsync(updatedTag.toDbModel());

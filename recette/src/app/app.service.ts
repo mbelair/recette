@@ -9,6 +9,7 @@ import { Ingredient } from './models/ingredient';
 import { IngredientDetail } from './models/ingredientDetail';
 import { Recette } from './models/recette';
 import { Tag } from './models/tag';
+import { TagDetail } from './models/TagDetail';
 
 
 
@@ -91,6 +92,10 @@ export class AppService {
 
   getIngredientDetail(id: number): Observable<IngredientDetail> {
     return this.http.get<IngredientDetail>(this.url + "/Ingredient/" + id);
+  }
+
+  getTagDetail(id: number): Observable<TagDetail> {
+    return this.http.get<TagDetail>(this.url + "/Tag/" + id);
   }
 
   deleteIngredient(ingredient: Ingredient): Observable<void> {

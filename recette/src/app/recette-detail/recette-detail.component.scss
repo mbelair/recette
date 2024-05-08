@@ -31,6 +31,7 @@
     .recipe-info-list {
         display: flex;
         padding: 0;
+        flex-wrap: wrap;
 
         li {
             display: flex;
@@ -50,7 +51,6 @@
                     left: 0;
                     position: absolute;
                     top: .2rem;
-                    transform: translateX(-12px);
                     width: .1rem;
                 }
             }

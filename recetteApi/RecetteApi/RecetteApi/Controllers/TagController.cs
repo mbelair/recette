@@ -41,5 +41,11 @@ namespace RecetteApi.Controllers
             await this._databaseController.DeleteTag(id);
             return Ok();
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<TagDetail> GetTagByIdWithRecettes(int id)
+        {
+            return await this._databaseController.GetTagByIdWithRecettes(id);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace RecetteClassLibrary.Models
 {
-    public class IngredientDetail : Ingredient
+    public class TagDetail : Tag
     {
         public IEnumerable<Recette> Recettes { get; set; } = [];
 
