@@ -27,6 +27,16 @@
 
             mat-chip-set {
                 margin-top: auto;
+
+                mat-chip {
+                    &.tags {
+                        --mdc-chip-elevated-container-color: #e0e0ff;
+                    }
+
+                    &.typeCode {
+                        --mdc-chip-elevated-container-color: #ffdad6
+                    }
+                }
             }
         }
 

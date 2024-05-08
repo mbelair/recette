@@ -9,6 +9,7 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { AppService } from '../app.service';
 import { Recette } from '../models/recette';
+import { TypeRepas } from '../models/typeRepas';
 
 
 @Component({
@@ -50,5 +51,9 @@ export class RecetteElementComponent {
 
   navigate(recette: Recette) {
     this.router.navigate(['recette-detail', recette.id]);
+  }
+
+  getTypeRepasLabel(typeCode: string): string {
+    return TypeRepas.fromTypeCode(typeCode).label;
   }
 }

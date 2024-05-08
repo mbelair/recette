@@ -10,7 +10,9 @@
             <p>Cuisson : {{formatTime(recette.tempsCuisson)}}</p>
             <p>Total : {{formatTime(recette.tempsPreparation + recette.tempsCuisson)}}</p>
             <mat-chip-set class="example-chip">
-                <mat-chip *ngFor="let tag of recette.tags" class="example-box">{{tag.nom}}</mat-chip>
+                <mat-chip class="tags" *ngFor="let tag of recette.tags">{{tag.nom}}</mat-chip>
+                <mat-chip class="typeCode"
+                    *ngFor="let typeRepas of recette.typeRepas">{{getTypeRepasLabel(typeRepas)}}</mat-chip>
             </mat-chip-set>
         </mat-card-content>
         <mat-divider></mat-divider>
