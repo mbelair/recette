@@ -9,10 +9,13 @@
             <p>Préparation : {{formatTime(recette.tempsPreparation)}}</p>
             <p>Cuisson : {{formatTime(recette.tempsCuisson)}}</p>
             <p>Total : {{formatTime(recette.tempsPreparation + recette.tempsCuisson)}}</p>
-            <mat-chip-set class="example-chip">
-                <mat-chip class="tags" *ngFor="let tag of recette.tags">{{tag.nom}}</mat-chip>
-                <mat-chip class="typeCode"
+            <mat-chip-set class="example-chip" *ngIf="recette.typeRepas.length>0">
+                <mat-chip (click)="applyTypeRepasFilter(typeRepas)" class="typeCode"
                     *ngFor="let typeRepas of recette.typeRepas">{{getTypeRepasLabel(typeRepas)}}</mat-chip>
+            </mat-chip-set>
+            <mat-chip-set class="example-chip" *ngIf="recette.tags.length>0">
+                <mat-chip (click)="applyTagFilter(tag)" class="tags"
+                    *ngFor="let tag of recette.tags">{{tag.nom}}</mat-chip>
             </mat-chip-set>
         </mat-card-content>
         <mat-divider></mat-divider>

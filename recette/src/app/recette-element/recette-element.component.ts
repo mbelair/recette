@@ -10,6 +10,8 @@ import { Observable, map } from 'rxjs';
 import { AppService } from '../app.service';
 import { Recette } from '../models/recette';
 import { TypeRepas } from '../models/typeRepas';
+import { Filters } from '../models/filters';
+import { Tag } from '../models/tag';
 
 
 @Component({
@@ -55,5 +57,27 @@ export class RecetteElementComponent {
 
   getTypeRepasLabel(typeCode: string): string {
     return TypeRepas.fromTypeCode(typeCode).label;
+  }
+
+  applyTypeRepasFilter(typeRepas: string) {
+    let filter: Filters = this.service.filters.value;
+    if (filter == null) {
+      filter = new Filters();
+    }
+    if (!filter.typeRepas.map(t => t.typeCode).includes(typeRepas)) {
+      filter.typeRepas.push(TypeRepas.fromTypeCode(typeRepas));
+      this.service.filters.next(filter);
+    }
+  }
+
+  applyTagFilter(tag: Tag) {
+    let filter: Filters = this.service.filters.value;
+    if (filter == null) {
+      filter = new Filters();
+    }
+    if (!filter.tags.map(t => t.id).includes(tag.id)) {
+      filter.tags.push(tag);
+      this.service.filters.next(filter);
+    }
   }
 }

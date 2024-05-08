@@ -3,11 +3,11 @@ import { Tag } from "./tag";
 import { TypeRepas } from "./typeRepas";
 
 export class Filters {
-    includedIngredients: Ingredient[];
-    excludedIngredients: Ingredient[];
+    includedIngredients: Ingredient[] = [];
+    excludedIngredients: Ingredient[] = [];
     typeRepas: TypeRepas[] = [];
     tempsTotal: TempsTotal[] = [];
-    tags: Tag[];
+    tags: Tag[] = [];
 }
 
 export enum TempsTotal {
