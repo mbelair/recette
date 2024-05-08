@@ -10,12 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../environments/environment';
 import { Observable, map } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatChipsModule } from '@angular/material/chips';
+import { TypeRepas } from '../models/typeRepas';
 
 
 @Component({
   selector: 'app-recette-detail',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule, MatButtonModule],
+  imports: [CommonModule, MatCheckboxModule, MatButtonModule, MatChipsModule],
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })
@@ -53,5 +55,9 @@ export class RecetteDetailComponent implements OnInit {
 
   isDev(): boolean {
     return !environment.production;
+  }
+
+  getTypeRepasLabel(typeCode: string): string {
+    return TypeRepas.fromTypeCode(typeCode).label;
   }
 }

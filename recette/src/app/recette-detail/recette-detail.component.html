@@ -1,5 +1,39 @@
 <div *ngIf="recette != null" class="recette-detail">
     <h1>{{recette.nom}}</h1>
+    <ul class="recipe-info-list">
+        <li>
+            <span class="bold">Préparation</span>
+            <span>
+                {{recette.tempsPreparation}} min
+            </span>
+        </li>
+        <li>
+            <span class="bold">Cuisson</span>
+            <span>
+                {{recette.tempsCuisson}} min
+            </span>
+        </li>
+
+        <li>
+            <span class="bold">Rendement</span>
+            <span>{{recette.nombrePortion}} portions</span>
+        </li>
+    </ul>
+    <p>
+        <span class="bold">Type de repas</span>
+        <mat-chip-set>
+            <mat-chip *ngFor="let typeRepas of recette.typeRepas">{{getTypeRepasLabel(typeRepas)}}</mat-chip>
+        </mat-chip-set>
+    </p>
+
+    <p>
+        <span class="bold">Étiquettes</span>
+        <mat-chip-set>
+            <mat-chip *ngFor="let tags of recette.tags">{{tags.nom}}</mat-chip>
+        </mat-chip-set>
+    </p>
+
+
     <button *ngIf="isDev()" mat-stroked-button (click)="editRecette()">Modifier</button>
     <div class="recetteDiv" [ngClass]="{'isColumnFlex': (isColumnFlex$|async)}">
         <div class="ingredientDiv">
