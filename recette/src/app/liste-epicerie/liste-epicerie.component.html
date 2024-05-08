@@ -1,1 +1,19 @@
-<p>liste-epicerie works!</p>
+<h1>Liste d'épicerie</h1>
+<h2>Recettes inclues</h2>
+<ul>
+    <li *ngFor="let r of recettes">
+        {{r.nom}}
+        <button mat-icon-button color="primary">
+            <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+    </li>
+</ul>
+<h2>Liste d'ingrédients</h2>
+<ul>
+    <li *ngFor="let ingredients of ingredientList | keyvalue">
+        <span [innerHTML]="formatIngredient(ingredients.value)"></span>
+        <ul *ngIf="ingredients.value.length > 1">
+            <li *ngFor="let ingredient of ingredients.value" [innerHTML]="formatIngredient([ingredient])"></li>
+        </ul>
+    </li>
+</ul>

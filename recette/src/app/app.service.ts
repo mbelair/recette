@@ -248,6 +248,9 @@ export class AppService {
         url = 'assets/recettes.json';
       }
       return this.http.get<Recette[]>(url).pipe(
+        map((value: Recette[]) => {
+          return value.map(v => Recette.fromRecette(v));
+        }),
         tap({
           next: (value) => {
             this.recettes.next(value);
