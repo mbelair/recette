@@ -3,17 +3,25 @@
 <ul>
     <li *ngFor="let r of recettes">
         {{r.nom}}
-        <button mat-icon-button color="primary">
+        <button (click)="openDeleteRecetteDialog(r)" mat-icon-button color="primary">
             <mat-icon fontIcon="delete"></mat-icon>
         </button>
     </li>
 </ul>
 <h2>Liste d'ingrédients</h2>
-<ul>
-    <li *ngFor="let ingredients of ingredientList | keyvalue">
-        <span [innerHTML]="formatIngredient(ingredients.value)"></span>
-        <ul *ngIf="ingredients.value.length > 1">
-            <li *ngFor="let ingredient of ingredients.value" [innerHTML]="formatIngredient([ingredient])"></li>
-        </ul>
-    </li>
-</ul>
+<div *ngFor="let categories of ingredientList|keyvalue">
+    <h3>{{getCategoryLabel(categories.key)}}</h3>
+    <ul class="nobullet">
+        <li *ngFor="let ingredients of categories.value | keyvalue">
+            <mat-checkbox color="primary">
+                <span [innerHTML]="formatIngredient(ingredients.value)"></span>
+
+                <ul class="bullet" *ngIf="ingredients.value.length > 1">
+                    <li *ngFor="let ingredient of ingredients.value">
+                        <span [innerHTML]="formatIngredient([ingredient])"></span>
+                    </li>
+                </ul>
+            </mat-checkbox>
+        </li>
+    </ul>
+</div>

@@ -21,6 +21,7 @@
         <mat-divider></mat-divider>
         <mat-card-actions>
             <a (click)="navigate(recette)" mat-stroked-button color="primary">Ouvrir</a>
+            <app-liste-epicerie-button [recette]="recette"></app-liste-epicerie-button>
         </mat-card-actions>
     </mat-card>
 </div>

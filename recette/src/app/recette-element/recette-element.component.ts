@@ -8,16 +8,18 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { AppService } from '../app.service';
-import { Recette } from '../models/recette';
-import { TypeRepas } from '../models/typeRepas';
 import { Filters } from '../models/filters';
+import { Recette } from '../models/recette';
 import { Tag } from '../models/tag';
+import { TypeRepas } from '../models/typeRepas';
+import { MatIconModule } from '@angular/material/icon';
+import { ListeEpicerieButtonComponent } from '../liste-epicerie-button/liste-epicerie-button.component';
 
 
 @Component({
   selector: 'app-recette-element',
   standalone: true,
-  imports: [MatCardModule, MatDividerModule, MatButtonModule, RouterOutlet, RouterModule, MatChipsModule, CommonModule],
+  imports: [MatCardModule, MatDividerModule, MatButtonModule, RouterOutlet, RouterModule, MatChipsModule, CommonModule, MatIconModule, ListeEpicerieButtonComponent],
   templateUrl: './recette-element.component.html',
   styleUrl: './recette-element.component.scss'
 })

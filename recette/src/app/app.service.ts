@@ -24,9 +24,16 @@ export class AppService {
   private recettes: BehaviorSubject<Recette[]> = new BehaviorSubject(null);
 
   filters: BehaviorSubject<Filters> = new BehaviorSubject(null);
+  listeEpicerie: BehaviorSubject<number[]> = new BehaviorSubject([]);
+
+  private readonly listeEpicerieKey = "listeEpicerie";
 
   constructor(private readonly http: HttpClient) {
-
+    let r: number[] = JSON.parse(localStorage.getItem(this.listeEpicerieKey));
+    if (r == null) {
+      r = [];
+    }
+    this.listeEpicerie.next(r);
   }
 
   isDev(): boolean {
@@ -35,6 +42,20 @@ export class AppService {
 
   private ingredientCall$: Observable<Ingredient[]> = null;
   private tagsCall$: Observable<Tag[]> = null;
+
+  addToListeEpicerie(recette: Recette) {
+    const r = this.listeEpicerie.value;
+    r.push(recette.id);
+    this.listeEpicerie.next(r);
+    localStorage.setItem(this.listeEpicerieKey, JSON.stringify(r));
+  }
+
+  removeFromListeEpicerie(recette: Recette) {
+    let r = this.listeEpicerie.value;
+    r = r.filter(r => r !== recette.id);
+    this.listeEpicerie.next(r);
+    localStorage.setItem(this.listeEpicerieKey, JSON.stringify(r));
+  }
 
   getAllIngredients(search: string): Observable<Ingredient[]> {
     if (!this.allIngredients.value) {
@@ -91,11 +112,21 @@ export class AppService {
   }
 
   getIngredientDetail(id: number): Observable<IngredientDetail> {
-    return this.http.get<IngredientDetail>(this.url + "/Ingredient/" + id);
+    return this.http.get<IngredientDetail>(this.url + "/Ingredient/" + id).pipe(
+      map(i => {
+        i.recettes.sort((a, b) => a.nom.localeCompare(b.nom));
+        return i;
+      })
+    );
   }
 
   getTagDetail(id: number): Observable<TagDetail> {
-    return this.http.get<TagDetail>(this.url + "/Tag/" + id);
+    return this.http.get<TagDetail>(this.url + "/Tag/" + id).pipe(
+      map(i => {
+        i.recettes.sort((a, b) => a.nom.localeCompare(b.nom));
+        return i;
+      })
+    );
   }
 
   deleteIngredient(ingredient: Ingredient): Observable<void> {
@@ -253,7 +284,7 @@ export class AppService {
         }),
         tap({
           next: (value) => {
-            this.recettes.next(value);
+            this.recettes.next(value.sort((a, b) => a.nom.localeCompare(b.nom)));
           }
         })
       );

@@ -36,6 +36,7 @@
 
 
     <button *ngIf="isDev()" mat-stroked-button (click)="editRecette()">Modifier</button>
+    <app-liste-epicerie-button [recette]="recette"></app-liste-epicerie-button>
     <div class="recetteDiv" [ngClass]="{'isColumnFlex': (isColumnFlex$|async)}">
         <div class="ingredientDiv">
             <h2>Ingrédients</h2>

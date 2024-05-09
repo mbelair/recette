@@ -1,4 +1,4 @@
-import { Ingredient, IngredientCategoryEnum } from "./ingredient";
+import { IngredientCategoryEnum } from "./ingredient";
 import { IngredientRecette } from "./ingredientRecette";
 import { Recette } from "./recette";
 import { UniteMesure } from "./uniteMesure";

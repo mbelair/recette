@@ -44,5 +44,9 @@
             line-height: --mat-card-title-text-line-height;
             min-height: calc(var(--mat-card-title-text-line-height) * 3);
         }
+
+        mat-card-actions app-liste-epicerie-button {
+            margin-left: 5px;
+        }
     }
 }

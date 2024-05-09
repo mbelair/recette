@@ -1,3 +1,23 @@
 ::ng-deep b {
     font-weight: 550;
 }
+
+h3,
+h2 {
+    margin-bottom: 0;
+}
+
+ul {
+    margin: 0;
+
+    &.nobullet {
+        list-style-type: none;
+    }
+}
+
+.mat-mdc-checkbox-checked {
+    ::ng-deep label {
+        color: rgb(136, 136, 136);
+        text-decoration: line-through;
+    }
+}

@@ -12,12 +12,13 @@ import { Observable, map } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatChipsModule } from '@angular/material/chips';
 import { TypeRepas } from '../models/typeRepas';
+import { ListeEpicerieButtonComponent } from '../liste-epicerie-button/liste-epicerie-button.component';
 
 
 @Component({
   selector: 'app-recette-detail',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule, MatButtonModule, MatChipsModule],
+  imports: [CommonModule, MatCheckboxModule, MatButtonModule, MatChipsModule, ListeEpicerieButtonComponent],
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })
