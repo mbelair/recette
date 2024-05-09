@@ -9,7 +9,7 @@
     </li>
 </ul>
 <h2>Liste d'ingrédients</h2>
-<div *ngFor="let categories of ingredientList|keyvalue">
+<div *ngFor="let categories of ingredientList|keyvalue: orderCategories">
     <h3>{{getCategoryLabel(categories.key)}}</h3>
     <ul class="nobullet">
         <li *ngFor="let ingredients of categories.value | keyvalue">

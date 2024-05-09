@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AppService } from '../app.service';
 import { IngredientListeEpicerie } from '../models/IngredientListeEpicerie';
 import { Recette } from '../models/recette';
-import { IngredientCategoryEnum, getCategoryLabel } from '../models/ingredient';
+import { IngredientCategoryEnum, getCategoryLabel, getCategoryOrder } from '../models/ingredient';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericDeleteDialogComponent } from '../generic-delete-dialog/generic-delete-dialog.component';
@@ -89,5 +89,9 @@ export class ListeEpicerieComponent implements OnInit {
         this.service.removeFromListeEpicerie(recette);
       }
     });
+  }
+
+  orderCategories(a: KeyValue<IngredientCategoryEnum, Map<number, IngredientListeEpicerie[]>>, b: KeyValue<IngredientCategoryEnum, Map<number, IngredientListeEpicerie[]>>) {
+    return getCategoryOrder(a.key) - getCategoryOrder(b.key);
   }
 }

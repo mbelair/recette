@@ -63,3 +63,26 @@ export function getCategoryLabel(category: IngredientCategoryEnum) {
             return "Alcool";
     }
 };
+
+export function getCategoryOrder(category: IngredientCategoryEnum): number {
+    switch (category) {
+        case (IngredientCategoryEnum.FRUIT_LEGUME):
+            return 0;
+        case (IngredientCategoryEnum.BOULANGERIE):
+            return 2;
+        case (IngredientCategoryEnum.BOUCHERIE):
+            return 1;
+        case (IngredientCategoryEnum.POISSONNERIE):
+            return 3;
+        case (IngredientCategoryEnum.CHARCUTTERIE):
+            return 4;
+        case (IngredientCategoryEnum.PRODUIT_LAITIER):
+            return 5;
+        case (IngredientCategoryEnum.CONGELE):
+            return 7;
+        case (IngredientCategoryEnum.EPICERIE):
+            return 6;
+        default:
+            return 99;
+    }
+}
