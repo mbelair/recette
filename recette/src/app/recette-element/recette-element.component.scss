@@ -45,8 +45,20 @@
             min-height: calc(var(--mat-card-title-text-line-height) * 3);
         }
 
-        mat-card-actions app-liste-epicerie-button {
-            margin-left: 5px;
+        mat-card-actions {
+            min-height: unset;
+            flex-wrap: wrap;
+
+            app-liste-epicerie-button {
+                margin-left: 5px;
+
+            }
+
+            app-liste-epicerie-button,
+            a {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
         }
     }
 }

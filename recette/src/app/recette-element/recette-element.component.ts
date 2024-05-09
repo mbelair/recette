@@ -31,12 +31,12 @@ export class RecetteElementComponent {
       map(result => result.matches)
     );
 
-  isSmall$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Small])
+  isSmall$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.Medium])
     .pipe(
       map(result => result.matches)
     );
 
-  isMedium$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Medium])
+  isMedium$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Large])
     .pipe(
       map(result => result.matches)
     );
