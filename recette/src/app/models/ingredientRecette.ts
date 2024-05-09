@@ -9,14 +9,15 @@ export class IngredientRecette {
     ordre: number;
     detail: string;
 
-    getLabel(): string {
+    getLabel(scale: number): string {
         let toReturn = "";
+
         if (this.quantite) {
-            toReturn += this.quantite + ' ';
+            toReturn += (this.quantite * scale) + ' ';
         }
 
-        let unitLabel = UniteMesure.fromTypeCode(this.unite).getFormatedLabel(this.quantite > 1);
-        const imperialLabel = this.convertToImperial();
+        let unitLabel = UniteMesure.fromTypeCode(this.unite).getFormatedLabel((this.quantite * scale) > 1);
+        const imperialLabel = this.convertToImperial(scale);
         if (imperialLabel) {
             unitLabel = `${unitLabel} (${imperialLabel})`;
         }
@@ -24,16 +25,17 @@ export class IngredientRecette {
         return `${toReturn}${unitLabel} ${this.ingredient.nom} ${this.detail}`
     }
 
-    convertToImperial() {
+    convertToImperial(scale: number) {
         const unite = UniteMesure.fromTypeCode(this.unite);
+        const scaledQuantite = this.quantite * scale;
         if (unite === UniteMesure.ML) {
-            if (this.quantite % 250 === 0) {
-                const nombretasses = this.quantite / 250;
+            if (scaledQuantite % 250 === 0) {
+                const nombretasses = scaledQuantite / 250;
                 return `${nombretasses} ${UniteMesure.TASSE.getFormatedLabel(nombretasses > 1)}`;
             }
-            if (this.quantite % 125 === 0) {
+            if (scaledQuantite % 125 === 0) {
                 let nombreTasses = 0;
-                let nombreDemiTasses = this.quantite / 125;
+                let nombreDemiTasses = scaledQuantite / 125;
                 while (nombreDemiTasses > 1) {
                     nombreTasses++;
                     nombreDemiTasses -= 2;
@@ -41,9 +43,9 @@ export class IngredientRecette {
                 const formatted = nombreTasses === 0 ? `\u00BD` : `${nombreTasses} \u00BD`;
                 return `${formatted} ${UniteMesure.TASSE.getFormatedLabel(nombreTasses > 1)}`;
             }
-            if (this.quantite % 80 === 0) {
+            if (scaledQuantite % 80 === 0) {
                 let nombreTasses = 0;
-                let nombreTiersTasses = this.quantite / 80;
+                let nombreTiersTasses = scaledQuantite / 80;
                 while (nombreTiersTasses > 2) {
                     nombreTasses++;
                     nombreTiersTasses -= 3;
@@ -57,9 +59,9 @@ export class IngredientRecette {
                 const formatted = nombreTasses === 0 ? unicode : `${nombreTasses} ${unicode}`;
                 return `${formatted} ${UniteMesure.TASSE.getFormatedLabel(nombreTasses > 1)}`;
             }
-            if (this.quantite % 60 === 0) {
+            if (scaledQuantite % 60 === 0) {
                 let nombreTasses = 0;
-                let nombreQuarttasses = this.quantite / 60;
+                let nombreQuarttasses = scaledQuantite / 60;
                 while (nombreQuarttasses > 3) {
                     nombreTasses++;
                     nombreQuarttasses -= 4;
@@ -75,9 +77,9 @@ export class IngredientRecette {
                 const formatted = nombreTasses === 0 ? unicode : `${nombreTasses} ${unicode}`;
                 return `${formatted} ${UniteMesure.TASSE.getFormatedLabel(nombreTasses > 1)}`;
             }
-            if (this.quantite % 30 === 0) {
+            if (scaledQuantite % 30 === 0) {
                 let nombreTasses = 0;
-                let nombreHuitiemeTasses = this.quantite / 30;
+                let nombreHuitiemeTasses = scaledQuantite / 30;
                 while (nombreHuitiemeTasses > 7) {
                     nombreTasses++;
                     nombreHuitiemeTasses -= 8;
@@ -104,19 +106,19 @@ export class IngredientRecette {
             }
 
 
-            if (this.quantite % 15 === 0) {
-                const nombretasses = this.quantite / 15;
+            if (scaledQuantite % 15 === 0) {
+                const nombretasses = scaledQuantite / 15;
                 return `${nombretasses} ${UniteMesure.C_A_SOUPE.getFormatedLabel(nombretasses > 1)}`;
             }
 
-            if (this.quantite % 5 === 0) {
-                const nombretasses = this.quantite / 5;
+            if (scaledQuantite % 5 === 0) {
+                const nombretasses = scaledQuantite / 5;
                 return `${nombretasses} ${UniteMesure.C_A_THE.getFormatedLabel(nombretasses > 1)}`;
             }
 
 
         } else if (unite === UniteMesure.G) {
-            const lbs = this.quantite / 450;
+            const lbs = scaledQuantite / 450;
             return `${Intl.NumberFormat("fr-CA", { maximumSignificantDigits: 2 }).format(lbs)} ${UniteMesure.LB.getFormatedLabel(lbs > 1)}`;
         }
         return "";

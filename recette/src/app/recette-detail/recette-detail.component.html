@@ -27,14 +27,19 @@
         </mat-chip-set>
     </p>
 
-    <p>
+    <p *ngIf="recette.tags.length > 0">
         <span class="bold">Étiquettes</span>
         <mat-chip-set>
             <mat-chip class="tags" *ngFor="let tags of recette.tags">{{tags.nom}}</mat-chip>
         </mat-chip-set>
     </p>
 
-
+    <div>
+        <mat-form-field>
+            <mat-label>Échelle</mat-label>
+            <input [(ngModel)]="scale" matInput type="number" />
+        </mat-form-field>
+    </div>
     <button *ngIf="isDev()" mat-stroked-button (click)="editRecette()">Modifier</button>
     <app-liste-epicerie-button [recette]="recette"></app-liste-epicerie-button>
     <div class="recetteDiv" [ngClass]="{'isColumnFlex': (isColumnFlex$|async)}">
@@ -45,7 +50,7 @@
                 <ul>
                     <li *ngFor="let i of ci.ingredient">
                         <mat-checkbox color="primary">
-                            {{i.getLabel()}}
+                            {{i.getLabel(scale)}}
                         </mat-checkbox>
                     </li>
                 </ul>

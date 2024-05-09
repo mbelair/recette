@@ -13,12 +13,14 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatChipsModule } from '@angular/material/chips';
 import { TypeRepas } from '../models/typeRepas';
 import { ListeEpicerieButtonComponent } from '../liste-epicerie-button/liste-epicerie-button.component';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-recette-detail',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule, MatButtonModule, MatChipsModule, ListeEpicerieButtonComponent],
+  imports: [CommonModule, MatCheckboxModule, MatButtonModule, MatChipsModule, MatInputModule, FormsModule, ListeEpicerieButtonComponent],
   templateUrl: './recette-detail.component.html',
   styleUrl: './recette-detail.component.scss'
 })
@@ -26,6 +28,7 @@ export class RecetteDetailComponent implements OnInit {
 
   id: number = -1;
   recette: Recette = null;
+  scale: number = 1;
   constructor(public service: AppService, private route: ActivatedRoute, protected router: Router, private breakpointObserver: BreakpointObserver) {
 
   }
