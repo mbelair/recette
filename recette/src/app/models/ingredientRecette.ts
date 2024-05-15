@@ -107,13 +107,43 @@ export class IngredientRecette {
 
 
             if (scaledQuantite % 15 === 0) {
-                const nombretasses = scaledQuantite / 15;
-                return `${nombretasses} ${UniteMesure.C_A_SOUPE.getFormatedLabel(nombretasses > 1)}`;
+                const nombreCuillere = scaledQuantite / 15;
+                return `${nombreCuillere} ${UniteMesure.C_A_SOUPE.getFormatedLabel(nombreCuillere > 1)}`;
             }
 
             if (scaledQuantite % 5 === 0) {
-                const nombretasses = scaledQuantite / 5;
-                return `${nombretasses} ${UniteMesure.C_A_THE.getFormatedLabel(nombretasses > 1)}`;
+                const nombreCuillere = scaledQuantite / 5;
+                return `${nombreCuillere} ${UniteMesure.C_A_THE.getFormatedLabel(nombreCuillere > 1)}`;
+            }
+
+            if (scaledQuantite % 2.5 === 0) {
+                let nombreCuillere = 0;
+                let nombreDemiCuillere = scaledQuantite / 2.5;
+                while (nombreDemiCuillere > 1) {
+                    nombreCuillere++;
+                    nombreDemiCuillere -= 2;
+                }
+                const formatted = nombreCuillere === 0 ? `\u00BD` : `${nombreCuillere} \u00BD`;
+                return `${formatted} ${UniteMesure.C_A_THE.getFormatedLabel(nombreCuillere > 1)}`;
+            }
+
+            if (scaledQuantite % (5 / 4) === 0) {
+                let nombreCuillere = 0;
+                let nombreQuartCuillere = scaledQuantite / (5 / 4);
+                while (nombreQuartCuillere > 3) {
+                    nombreCuillere++;
+                    nombreQuartCuillere -= 4;
+                }
+                let unicode = "";
+                if (nombreQuartCuillere === 1) {
+                    unicode = '\u00BC';
+                } else if (nombreQuartCuillere === 2) {
+                    unicode = '\u00BD';
+                } else if (nombreQuartCuillere === 3) {
+                    unicode = '\u00BE';
+                }
+                const formatted = nombreCuillere === 0 ? unicode : `${nombreCuillere} ${unicode}`;
+                return `${formatted} ${UniteMesure.C_A_THE.getFormatedLabel(nombreCuillere > 1)}`;
             }
 
 
